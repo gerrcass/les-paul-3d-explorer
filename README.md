@@ -2,7 +2,7 @@
 
 # Les Paul Anatomy
 
-**A photoreal, interactive 3D anatomy of a 1959 Gibson Les Paul Standard.** Every visible part is named and explained, and the whole electrical story runs from the strings to the amplifier.
+**A photoreal, interactive 3D anatomy of a Gibson Les Paul Custom “Black Beauty.”** Every visible part is named and explained, and the whole electrical story runs from the strings to the amplifier.
 
 [**Open the live instrument →**](https://gerrcass.github.io/les-paul-3d-explorer/)
 
@@ -10,7 +10,7 @@
 
 ## What this is
 
-The model is built entirely from code — geometry, flamed-maple sunburst, rosewood grain, cream plastics, nickel hardware, and the studio lighting. There are no downloaded models or image textures, and the page makes no network requests after it loads.
+The model is built entirely from code — geometry, gloss-black lacquer, ebony grain, cream binding, gold hardware, and the studio lighting. There are no downloaded models or image textures, and the page makes no network requests after it loads.
 
 - **31 parts**, each with a name, a purpose, a mechanism, a material, and a field note.
 - **Hover** any part for a quick identification card and a gold outline.
@@ -56,7 +56,7 @@ A **humbucker** uses two coils with opposite winding and polarity. String motion
 | Category | Parts |
 | --- | --- |
 | Body & finish | Mahogany body, carved maple top, body binding |
-| Neck & fretboard | Set neck, rosewood fretboard, frets, trapezoid inlays, fretboard binding, bone nut, headstock, headstock veneer, logo, truss-rod cover |
+| Neck & fretboard | Set neck, ebony fretboard, frets, block inlays, fretboard binding, bone nut, headstock, headstock veneer, logo, truss-rod cover |
 | Electronics | Neck humbucker, bridge humbucker, pole pieces, volume controls, tone controls, pickup selector, output jack, control-cavity cover |
 | Hardware | Tuning machines, pickup rings, Tune-o-matic bridge, saddles, bridge posts & thumbwheels, stopbar tailpiece, poker chip, strap buttons, pickguard |
 | Strings | Strings |
@@ -72,6 +72,10 @@ The complete definitions, including what each part does and how it works, live i
 | ![Stage 2 of the signal path, the neck pickup](docs/screenshots/signal-path.webp) | ![The strings, pickups, hardware, and body separated](docs/screenshots/exploded.webp) |
 | **Mobile** | **Mobile inspector** |
 | ![The full instrument on a phone](docs/screenshots/mobile.webp) | ![The bottom-sheet inspector on a phone](docs/screenshots/mobile-inspector.webp) |
+
+### Headstock detail
+
+![The bound Les Paul Custom headstock with the split-diamond inlay, gold tuners, and Custom truss-rod cover](docs/screenshots/headstock.webp)
 
 ## Development
 

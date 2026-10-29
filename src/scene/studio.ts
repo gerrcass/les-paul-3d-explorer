@@ -10,6 +10,7 @@ import {
   PCFShadowMap,
   PlaneGeometry,
   PMREMGenerator,
+  RectAreaLight,
   Scene,
   Vector3,
   type WebGLRenderer,
@@ -129,6 +130,16 @@ export function createStudio(
   scene.environment = env;
   scene.environmentIntensity = 0.42;
 
+  if (tier !== 'lite') {
+    void import('three/addons/lights/RectAreaLightUniformsLib.js').then(({ RectAreaLightUniformsLib }) => {
+      RectAreaLightUniformsLib.init();
+      const softbox = new RectAreaLight(0xfff1dc, 2.4, 20, 30);
+      softbox.position.set(-24, 16, 30);
+      softbox.lookAt(0, 5, 0);
+      group.add(softbox);
+    });
+  }
+
   renderer.shadowMap.type = PCFShadowMap;
   renderer.shadowMap.enabled = true;
 
@@ -152,6 +163,7 @@ export function createStudio(
 
   return { group, keyLight, setShadowQuality, dispose };
 }
+
 
 export function studioTarget(): Vector3 {
   return new Vector3(0, 10.5, 0);

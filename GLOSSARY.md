@@ -4,9 +4,9 @@ The vocabulary of the interactive instrument explainer. Definitions describe the
 
 ## The instrument
 
-**Burst**:
-A 1958–1960 Les Paul Standard with a sunburst-finished flamed maple top. This project depicts a 1959 Burst.
-_Avoid_: Sunburst guitar, vintage LP
+**Black Beauty**:
+A Les Paul Custom in gloss black with gold hardware, cream multi-ply binding, an ebony board with pearl block inlays, and a split-diamond headstock. This project depicts a modern Les Paul Custom.
+_Avoid_: Burst, sunburst Standard
 
 **Carve**:
 The domed, recurved shaping of a Les Paul's maple top, highest through the middle and dipping before it meets the binding.
@@ -17,7 +17,7 @@ The shallow dip in the carve just inside the body binding.
 _Avoid_: Dish, scoop
 
 **Binding**:
-The cream plastic strip that covers the seam between the top and the side of the body, and around the fretboard.
+The cream-and-black multi-ply strip that covers the seam between the top and the side of the body, and around the fretboard.
 _Avoid_: Edge trim, piping
 
 **Control cavity**:
@@ -69,7 +69,7 @@ One stop on the **Signal Path**, with its own explanation of what changes in the
 _Avoid_: Step, node
 
 **PAF**:
-The original "Patent Applied For" humbucking pickup. This project depicts a double-cream PAF-style pair.
+The original "Patent Applied For" humbucking pickup. This project depicts a pair of gold-covered PAF-style humbuckers.
 _Avoid_: Humbucker (use only when speaking generally)
 
 **Tune-o-matic**:
@@ -81,5 +81,5 @@ The anchored tailpiece that holds the string ends and sets their break angle ove
 _Avoid_: Tailpiece (prefer the specific term)
 
 **Poker chip**:
-The cream selector-switch ring printed with "Rhythm" and "Treble".
+The black selector-switch ring with gold lettering, printed with "Rhythm" and "Treble".
 _Avoid_: Switch plate

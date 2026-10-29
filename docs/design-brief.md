@@ -4,9 +4,9 @@ _Output of the `/grill-with-docs` session. The user asked for a challenging obje
 
 ## The challenge
 
-Prove that a static, dependency-light website can teach the **complete mechanical and electrical anatomy** of a 1959 Gibson Les Paul Standard using a photoreal instrument built entirely from code — every visible part named and explained on hover, the signal path legible end to end, and the whole thing deployable to GitHub Pages.
+Prove that a static, dependency-light website can teach the **complete mechanical and electrical anatomy** of a Gibson Les Paul Custom “Black Beauty” using a photoreal instrument built entirely from code — every visible part named and explained on hover, the signal path legible end to end, and the whole thing deployable to GitHub Pages.
 
-"Beautiful" is part of the acceptance criteria, not decoration: the model has to read as a real Burst in a studio, not a low-poly diagram.
+"Beautiful" is part of the acceptance criteria, not decoration: the model has to read as a real Les Paul Custom in a studio, not a low-poly diagram.
 
 ## Design tree
 
@@ -16,7 +16,7 @@ Prove that a static, dependency-light website can teach the **complete mechanica
 | --- | --- |
 | Who is this for? | Curious players, students, and makers who know what a Les Paul looks like but not what each part does. No prior electronics knowledge assumed. |
 | What is the one job? | Point at any part and understand its name, purpose, and place in the signal chain within three seconds. |
-| Which instrument? | A 1959 Les Paul Standard "Burst": sunburst flamed maple top, mahogany back, cream plastics, nickel hardware, double-cream PAF-style humbuckers, ABR-1 bridge, stopbar tailpiece, 3+3 open-book headstock, 22 frets. |
+| Which instrument? | A Gibson Les Paul Custom “Black Beauty”: gloss-black carved maple top, mahogany back, cream multi-ply binding, gold hardware, gold-covered PAF-style humbuckers, ebony board with pearl block inlays, split-diamond headstock, ABR-1 bridge, stopbar tailpiece, 3+3 open-book headstock, 22 frets. |
 | Real-time 3D or pre-rendered? | Real-time. Hover, isolate, explode, and a guided signal-path tour are the product. |
 | Is it a playable guitar? | No. This is an anatomy explainer. Audio synthesis and amp modelling are out of scope. |
 
@@ -25,7 +25,7 @@ Prove that a static, dependency-light website can teach the **complete mechanica
 | Question | Decision |
 | --- | --- |
 | Rendering stack? | Three.js + TypeScript + Vite, vanilla DOM. No React, no R3F: the render loop and DOM UI are both small and direct control keeps the dependency surface honest. |
-| Where does the art come from? | Code. All geometry, wood grain, sunburst, cream plastics, metal wear, and the studio environment are procedural. No downloaded models or textures. The repo stays self-contained, deterministic, and licence-clean. |
+| Where does the art come from? | Code. All geometry, wood grain, gloss-black lacquer, cream binding, gold hardware, metal wear, and the studio environment are procedural. No downloaded models or textures. The repo stays self-contained, deterministic, and licence-clean. |
 | How is a "part" represented? | One semantic **Part Registry** shared by the scene, the hover inspector, the parts index, and the guided tour. Meshes carry only a `partId`; all language lives in the registry. |
 | What is the primary learning device? | Hover -> tooltip (name + one-line function); click -> pinned inspector (full explanation, material, signal role); guided **Signal Path** tour for the electrical story; **Exploded View** for the mechanical story. |
 | Performance budget? | 60 fps at 1440p on integrated graphics at the default quality tier. Dynamic resolution, capped DPR, optional post-processing, and a low tier for weak GPUs. |

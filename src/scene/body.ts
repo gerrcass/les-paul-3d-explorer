@@ -1,5 +1,6 @@
 import {
   CatmullRomCurve3,
+  CylinderGeometry,
   ExtrudeGeometry,
   Group,
   Mesh,
@@ -88,12 +89,21 @@ function buildBinding(materials: MaterialSet): Group {
     'catmullrom',
     0.5,
   );
-  const binding = new Mesh(new TubeGeometry(curve, 320, 0.082, 8, true), materials.agedCream);
+  const binding = new Mesh(new TubeGeometry(curve, 320, 0.07, 8, true), materials.agedCream);
   binding.name = 'body-binding';
   binding.castShadow = true;
   binding.receiveShadow = true;
   tag(binding, 'body-binding');
   group.add(binding);
+
+  const innerBlackPoints = OUTLINE_VECTORS.map((point) => new Vector3(point.x * 0.99, point.y * 0.99, BODY_TOP_Z + 0.06));
+  const innerBlack = new Mesh(
+    new TubeGeometry(new CatmullRomCurve3(innerBlackPoints, true, 'catmullrom', 0.5), 300, 0.016, 6, true),
+    materials.blackPlastic,
+  );
+  tag(innerBlack, 'body-binding');
+  group.add(innerBlack);
+
   return group;
 }
 
@@ -123,7 +133,7 @@ function buildPickguard(materials: MaterialSet): Group {
   const flat = new ShapeGeometry(shape, 12);
   const plateGeometry = subdivideAndDome(flat, (x, y) => bodySurfaceZ(x, y) + 0.18, 3);
   flat.dispose();
-  const plate = new Mesh(plateGeometry, materials.cream);
+  const plate = new Mesh(plateGeometry, materials.mapleTop);
   plate.name = 'pickguard';
   plate.castShadow = false;
   plate.receiveShadow = true;
@@ -136,7 +146,7 @@ function buildPickguard(materials: MaterialSet): Group {
     'catmullrom',
     0.3,
   );
-  const border = new Mesh(new TubeGeometry(borderCurve, 200, 0.022, 6, true), materials.agedCream);
+  const border = new Mesh(new TubeGeometry(borderCurve, 200, 0.028, 6, true), materials.agedCream);
   border.name = 'pickguard-edge';
   tag(border, 'pickguard');
   group.add(border);
@@ -145,7 +155,7 @@ function buildPickguard(materials: MaterialSet): Group {
     new Vector3(4.2, 0.2, bodySurfaceZ(4.2, 0.2) + 0.2),
     new Vector3(4.2, 0.2, bodySurfaceZ(4.2, 0.2) + 0.24),
     0.052,
-    materials.nickel,
+    materials.gold,
     10,
   );
   tag(screw, 'pickguard');
@@ -198,27 +208,36 @@ function buildControlCover(materials: MaterialSet): Group {
 function buildStrapButtons(materials: MaterialSet): Group {
   const group = new Group();
   group.name = 'strap-buttons-group';
-  const placements: ReadonlyArray<readonly [number, number, number]> = [
-    [4.62, 8.1, 0.42],
-    [0, -8.5, 0.42],
-  ];
-  for (const [x, y, z] of placements) {
-    const stem = cylinderBetween(
-      new Vector3(x, y, z - 0.1),
-      new Vector3(x, y, z + 0.16),
-      0.09,
-      materials.nickel,
-      10,
-    );
-    tag(stem, 'strap-buttons');
-    group.add(stem);
 
-    const cap = new Mesh(new SphereGeometry(0.17, 16, 12), materials.nickel);
-    cap.position.set(x, y, z + 0.16);
-    cap.scale.z = 0.72;
-    tag(cap, 'strap-buttons');
-    group.add(cap);
-  }
+  // The upper button sits on the outside edge of the cutaway horn.
+  const upperX = 4.18;
+  const upperY = 8.0;
+  const upperZ = bodySurfaceZ(upperX, upperY) + 0.05;
+  const upperStem = new Mesh(new CylinderGeometry(0.085, 0.085, 0.3, 10), materials.goldSatin);
+  upperStem.rotation.z = Math.PI / 2;
+  upperStem.position.set(upperX + 0.13, upperY, upperZ);
+  tag(upperStem, 'strap-buttons');
+  group.add(upperStem);
+  const upperCap = new Mesh(new SphereGeometry(0.16, 16, 12), materials.goldSatin);
+  upperCap.position.set(upperX + 0.33, upperY, upperZ);
+  upperCap.scale.set(0.72, 1, 1);
+  tag(upperCap, 'strap-buttons');
+  group.add(upperCap);
+
+  // The lower button sits at the tail of the body.
+  const lowerY = -8.5;
+  const lowerZ = bodySurfaceZ(0, lowerY) + 0.08;
+  const lowerStem = new Mesh(new CylinderGeometry(0.09, 0.09, 0.26, 10), materials.goldSatin);
+  lowerStem.rotation.x = Math.PI / 2;
+  lowerStem.position.set(0, lowerY, lowerZ + 0.05);
+  tag(lowerStem, 'strap-buttons');
+  group.add(lowerStem);
+  const lowerCap = new Mesh(new SphereGeometry(0.17, 16, 12), materials.goldSatin);
+  lowerCap.position.set(0, lowerY, lowerZ + 0.22);
+  lowerCap.scale.z = 0.72;
+  tag(lowerCap, 'strap-buttons');
+  group.add(lowerCap);
+
   return group;
 }
 

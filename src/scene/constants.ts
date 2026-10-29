@@ -24,7 +24,7 @@ export const FRETBOARD_BODY_WIDTH = 2.18;
 
 export const STRING_XS_BRIDGE = [-1, -0.6, -0.2, 0.2, 0.6, 1] as const;
 export const STRING_XS_NUT = [-0.71, -0.426, -0.142, 0.142, 0.426, 0.71] as const;
-export const STRING_GAUGES = [0.03, 0.026, 0.022, 0.019, 0.016, 0.014] as const;
+export const STRING_GAUGES = [0.024, 0.021, 0.018, 0.016, 0.014, 0.012] as const;
 
 export const HEADSTOCK_ANGLE = (-17 * Math.PI) / 180;
 
@@ -57,23 +57,22 @@ export const BODY_OUTLINE: readonly Vector2[] = [
   new Vector2(4.9, 2.4),
   new Vector2(5.5, 4.0),
   new Vector2(5.5, 5.6),
-  new Vector2(5.2, 6.6),
-  new Vector2(4.9, 7.3),
-  new Vector2(4.5, 7.7),
-  new Vector2(4.2, 7.85),
-  new Vector2(3.95, 7.7),
-  new Vector2(3.8, 7.3),
-  new Vector2(3.7, 6.8),
-  new Vector2(3.4, 6.4),
-  new Vector2(2.9, 6.25),
-  new Vector2(2.2, 6.25),
-  new Vector2(1.55, 6.45),
-  new Vector2(-1.55, 6.4),
-  new Vector2(-2.6, 6.55),
-  new Vector2(-3.6, 7.0),
-  new Vector2(-4.6, 7.4),
-  new Vector2(-5.2, 7.1),
-  new Vector2(-5.4, 6.0),
+  new Vector2(5.3, 6.7),
+  new Vector2(5.0, 7.5),
+  new Vector2(4.65, 8.0),
+  new Vector2(4.3, 8.2),
+  new Vector2(4.0, 8.0),
+  new Vector2(3.8, 7.4),
+  new Vector2(3.6, 6.7),
+  new Vector2(3.0, 6.2),
+  new Vector2(2.2, 6.0),
+  new Vector2(1.55, 6.35),
+  new Vector2(-1.55, 6.35),
+  new Vector2(-2.4, 6.5),
+  new Vector2(-3.4, 6.8),
+  new Vector2(-4.3, 7.0),
+  new Vector2(-5.1, 6.9),
+  new Vector2(-5.35, 6.0),
   new Vector2(-5.5, 4.6),
   new Vector2(-5.3, 2.9),
   new Vector2(-5.0, 1.2),

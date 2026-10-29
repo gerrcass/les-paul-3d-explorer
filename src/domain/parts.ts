@@ -108,21 +108,21 @@ const PART_DATA: Record<PartId, PartData> = {
     purpose:
       'The body is the instrument’s structural and acoustic foundation. It holds the neck joint, the pickups, the bridge and tailpiece, and the routed control cavity.',
     mechanism:
-      'A single slab of mahogany is shaped, routed, and drilled before the maple cap is glued on. Its mass and stiffness damp some frequencies and reinforce others, which is a large part of why a Les Paul sustains the way it does.',
-    material: 'African mahogany',
-    fact: 'A finished 1959 Standard weighs roughly 9 lb (4 kg) — heavy for a solid-body guitar, and part of the Les Paul’s reputation.',
+      'A single slab of mahogany is shaped, routed, and drilled before the maple cap is glued on. Its mass and stiffness damp some frequencies and reinforce others; on the Custom the whole body is then sealed under gloss-black lacquer.',
+    material: 'African mahogany, gloss black',
+    fact: 'A finished Les Paul Custom is roughly 9–10 lb — heavy for a solid-body guitar, and part of the model’s reputation.',
   },
   'maple-top': {
     name: 'Carved maple top',
     shortName: 'Maple top',
     category: 'body',
-    tagline: 'Adds stiffness, brightness, and the arched silhouette of a Burst.',
+    tagline: 'Adds stiffness, brightness, and the arched silhouette of the Custom.',
     purpose:
       'The maple cap stiffens the body and adds upper-harmonic brightness to the mahogany’s warmth. Its carved dome is the shape your forearm rests on.',
     mechanism:
       'A thick maple book-match is glued to the mahogany, then carved into a crown that rises toward the centre. Just inside the binding the surface dips into the recurve, a shallow trough that catches light and makes the carve legible.',
-    material: 'Flamed maple',
-    fact: 'The sunburst is sprayed by hand: amber in the centre, then cherry, then a dark rim. Every Burst fades differently because the dyes are light-sensitive.',
+    material: 'Maple, gloss black',
+    fact: 'The Custom’s black lacquer is a mirror: the carve is read almost entirely from reflections, not from a sunburst.',
   },
   'body-binding': {
     name: 'Body binding',
@@ -130,11 +130,11 @@ const PART_DATA: Record<PartId, PartData> = {
     category: 'body',
     tagline: 'Covers the seam between the maple top and the mahogany side.',
     purpose:
-      'Binding protects the edge of the maple cap and gives the body a crisp cream outline that reads from across a stage.',
+      'Binding protects the edge of the maple cap and gives the body a crisp cream-and-black outline that reads from across a stage.',
     mechanism:
-      'A channel is routed around the perimeter, a flexible plastic strip is glued in, and the excess is scraped flush. On a Burst the binding yellows with age, which is why vintage examples look tobacco-stained rather than white.',
-    material: 'Aged cream celluloid',
-    fact: 'Binding is also a tell: a refinished or recarved guitar often gives itself away where the binding meets the top.',
+      'A channel is routed around the perimeter and a multi-ply cream-and-black strip is glued in, then scraped flush. The dark inner line is what gives a Custom its crisp, layered edge.',
+    material: 'Cream and black celluloid',
+    fact: 'The multi-ply binding is one of the quickest ways to tell a Custom from a Standard at a distance.',
   },
   pickguard: {
     name: 'Pickguard',
@@ -144,9 +144,9 @@ const PART_DATA: Record<PartId, PartData> = {
     purpose:
       'The pickguard takes the wear that would otherwise reach the maple top, and it covers the shallow channel routed for the pickup wires.',
     mechanism:
-      'A single-ply cream plate is screwed to the top with small nickel screws. It floats just above the finish, so it can be removed without disturbing the pickups or their rings.',
-    material: 'Cream celluloid',
-    fact: 'Many players remove the pickguard entirely; the screw holes are part of why original ’59s are so often “guard off”.',
+      'A black single-ply plate with a cream edge is screwed to the top with a gold screw. It floats just above the finish, so it can be removed without disturbing the pickups or their rings.',
+    material: 'Black celluloid with a cream edge',
+    fact: 'On the Custom the black guard almost disappears against the body; the cream edge is what makes its shape readable.',
   },
   'control-cavity-cover': {
     name: 'Control cavity cover',
@@ -169,20 +169,20 @@ const PART_DATA: Record<PartId, PartData> = {
       'The neck sets the scale length, carries the playing surface, and joins the body at the heel. Its stiffness and mass shape how the whole instrument responds.',
     mechanism:
       'A mahogany neck is glued into a mortise-and-tenon joint rather than bolted on. The long tenon gives more contact area with the body, which builders associate with sustain and a seamless feel at the heel.',
-    material: 'Mahogany',
+    material: 'Mahogany, gloss black',
     fact: 'The neck angle is set during the joint: too shallow and the bridge runs out of adjustment, too steep and the strings sit too high.',
   },
   fretboard: {
-    name: 'Rosewood fretboard',
+    name: 'Ebony fretboard',
     shortName: 'Fretboard',
     category: 'neck',
-    tagline: 'Provides the playing surface and the wear resistance frets need.',
+    tagline: 'Provides a dark, dense playing surface with a glassy attack.',
     purpose:
       'The fretboard holds the frets at exact positions and gives the player a stable, comfortable surface under the fingers.',
     mechanism:
-      'A 12-inch radius crowns the board across its width, so the strings can be set low without choking on bends. The board is glued to the neck and bounded by cream binding that hides the fret ends.',
-    material: 'Indian rosewood',
-    fact: 'The scale is 24.75 in, but the board’s 22nd fret sits over the body — the neck joint is closer to the bridge than it looks.',
+      'A 12-inch radius crowns the board across its width, so the strings can be set low without choking on bends. The ebony board is glued to the neck and bounded by cream binding that hides the fret ends.',
+    material: 'Ebony',
+    fact: 'Ebony is denser and darker than rosewood; the Custom uses it for a tight, glassy attack and a near-black board.',
   },
   frets: {
     name: 'Frets',
@@ -197,16 +197,16 @@ const PART_DATA: Record<PartId, PartData> = {
     fact: 'Fret wear is why old guitars need refrets; the first few frets take the most punishment from open chords.',
   },
   inlays: {
-    name: 'Trapezoid inlays',
+    name: 'Block inlays',
     shortName: 'Inlays',
     category: 'neck',
-    tagline: 'Mark the fret positions a player needs at a glance.',
+    tagline: 'Mark every fret position with the Custom’s pearl block inlays.',
     purpose:
-      'The inlays are visual landmarks for the 3rd, 5th, 7th, 9th, 12th, 15th, 17th, 19th, and 21st frets. The 12th gets two, because it is the octave.',
+      'The inlays are visual landmarks for the 1st, 3rd, 5th, 7th, 9th, 12th, 15th, 17th, 19th, and 21st frets. The 12th gets two, because it is the octave.',
     mechanism:
-      'Trapezoid pockets are routed into the rosewood and filled with a pearloid material, then sanded flush with the radius. Side dots do the same job for the player’s peripheral vision.',
-    material: 'Pearloid cellulose',
-    fact: 'The trapezoid shape replaced the earlier dot and block markers; it is one of the fastest ways to date a Les Paul.',
+      'Rectangular pockets are routed into the ebony and filled with pearloid, then sanded flush with the radius. Side dots do the same job for the player’s peripheral vision.',
+    material: 'Pearloid',
+    fact: 'Block inlays are one of the Les Paul Custom’s signatures; the Standard used trapezoids instead.',
   },
   'neck-binding': {
     name: 'Fretboard binding',
@@ -217,7 +217,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'Binding gives the fretboard a finished edge and keeps the fret tangs from catching a player’s hand during vibrato or slides.',
     mechanism:
       'Cream plastic strip is glued to the sides of the board before the frets are dressed. The fret ends are filed flush and the binding is scraped and polished, so the neck feels continuous rather than toothed.',
-    material: 'Aged cream celluloid',
+    material: 'Cream celluloid',
     fact: '“Nibs” — the binding that covers each fret end — are a hallmark of a bound Gibson board and a common check when verifying a refret.',
   },
   nut: {
@@ -241,7 +241,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The headstock carries the tuning machines and provides the break angle that keeps strings seated at the nut.',
     mechanism:
       'The open-book profile is angled back about 17 degrees. That angle pulls each string down through its nut slot, so it does not rattle or jump out when played hard.',
-    material: 'Mahogany',
+    material: 'Mahogany, gloss black',
     fact: 'The 17-degree pitch is a Gibson signature — and the reason a Les Paul headstock needs a little more care when it falls.',
   },
   'headstock-veneer': {
@@ -260,13 +260,13 @@ const PART_DATA: Record<PartId, PartData> = {
     name: 'Headstock logo',
     shortName: 'Logo',
     category: 'neck',
-    tagline: 'Identifies the instrument and its maker.',
+    tagline: 'Identifies the instrument with the Gibson wordmark and split-diamond inlay.',
     purpose:
-      'The inlaid wordmark is the most recognisable piece of branding on the guitar — and, for a learner, a handy orientation mark.',
+      'The split-diamond inlay and gold-tone wordmark identify the Custom — and, for a learner, they are a handy orientation mark.',
     mechanism:
-      'A pearloid “Gibson” inlay is set into the black veneer, along with the “Les Paul Model” script nearer the nut. The inlay is set before the headstock is finished.',
-    material: 'Pearloid inlay',
-    fact: 'The open-book headstock and this inlay are among the most copied shapes in guitar history.',
+      'A pearloid split diamond sits below the “Gibson” wordmark, with the “Les Paul Custom” script nearer the nut. The inlays are set into the black veneer before the headstock is finished.',
+    material: 'Pearloid and gold-tone inlay',
+    fact: 'The split diamond is the Les Paul Custom’s signature headstock inlay, and one of the most copied shapes in guitar history.',
   },
   'truss-rod-cover': {
     name: 'Truss rod cover',
@@ -289,7 +289,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'Each machine head turns a post that winds the string. The gear ratio makes small, precise tension changes possible.',
     mechanism:
       'A worm gear drives a pinion at roughly 14:1 or 18:1, so the button turns many times for one post revolution. The string wraps around the post and is held by the capstan and a few tidy winds.',
-    material: 'Nickel-plated brass and steel',
+    material: 'Gold-plated brass and steel',
     fact: 'The 3+3 layout keeps the strings straight from nut to post and spreads the tuner mass evenly on the headstock.',
   },
   strings: {
@@ -314,7 +314,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The neck pickup converts string motion into a small alternating voltage. Its position makes it fuller and softer than the bridge pickup.',
     mechanism:
       'Two coils share a magnet. The string disturbs the magnetic field, inducing a current in the coils; wiring the coils in series and out of phase cancels hum while doubling the signal. Closer to the neck, the string travels through a wider arc, emphasising the fundamental.',
-    material: 'Alnico magnet, enamel wire, cream ABS bobbins',
+    material: 'Alnico magnet, gold-plated cover',
     fact: 'The original PAF (“Patent Applied For”) pickups were never potted, which is why they can squeal under high gain — and why they sound so open.',
     signalStage: 'neck-pickup',
   },
@@ -327,7 +327,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The bridge pickup turns string motion into voltage at the brightest point of the string, where the harmonics are strongest.',
     mechanism:
       'Near the bridge the string’s arc is tighter, so the coil sees more high-frequency motion and less fundamental. The two coils are wired in series for a hotter, hum-cancelling signal.',
-    material: 'Alnico magnet, enamel wire, cream ABS bobbins',
+    material: 'Alnico magnet, gold-plated cover',
     fact: 'Pickup height is a real tone control: closer to the strings means more output, more attack, and often more magnetic pull on the string.',
     signalStage: 'bridge-pickup',
   },
@@ -352,7 +352,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'Each pole piece concentrates the magnetic field at one string, so every string is sensed with a similar strength.',
     mechanism:
       'Six steel screws or slugs per coil sit under the strings. On adjustable poles, turning a screw changes its height and thus the magnetic coupling for that string.',
-    material: 'Nickel-plated steel',
+    material: 'Gold-plated steel',
     fact: 'Staggered poles follow the fretboard radius; flat poles are cheaper and still common.',
   },
   bridge: {
@@ -363,9 +363,9 @@ const PART_DATA: Record<PartId, PartData> = {
     purpose:
       'The bridge defines the speaking end of each string and transfers its downward force into the body.',
     mechanism:
-      'Six saddles sit on a nickel bar. The thumbwheels set the whole bridge height, while each saddle screw moves that string’s contact point fore and aft to correct intonation.',
-    material: 'Nickel-plated zinc',
-    fact: 'The ABR-1 fitted to a Burst is a tune-o-matic with a narrow body; it is the sound and feel many players mean by “Les Paul bridge”.',
+      'Six saddles sit on a gold-plated bar. The thumbwheels set the whole bridge height, while each saddle screw moves that string’s contact point fore and aft to correct intonation.',
+    material: 'Gold-plated zinc',
+    fact: 'The ABR-1 is a tune-o-matic with a narrow body; it is the sound and feel many players mean by “Les Paul bridge”.',
   },
   saddles: {
     name: 'Bridge saddles',
@@ -376,7 +376,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The saddle is the exact point where a string leaves the bridge. Moving it changes the string’s speaking length.',
     mechanism:
       'Each saddle has a notch for its string and a screw that slides it along the bridge. The low strings need more compensation than the high strings, so the saddle line is never perfectly straight.',
-    material: 'Nickel-plated zinc',
+    material: 'Gold-plated zinc',
     fact: 'A guitar can be perfectly in tune open and still sour up the neck — that is a saddle and intonation problem, not a tuner problem.',
   },
   'bridge-posts': {
@@ -387,8 +387,8 @@ const PART_DATA: Record<PartId, PartData> = {
     purpose:
       'The posts transfer string load into the mahogany and let the bridge be raised or lowered without removing the strings.',
     mechanism:
-      'Steel posts are threaded into anchors set in the body. The thumbwheels beneath the bridge bear on the posts, so turning them changes action and string height.',
-    material: 'Nickel-plated steel',
+      'Gold-plated steel posts are threaded into anchors set in the body. The thumbwheels beneath the bridge bear on the posts, so turning them changes action and string height.',
+    material: 'Gold-plated steel',
     fact: 'Post lean is a real failure mode on vintage guitars; the string pull is constant and the wood is not.',
   },
   tailpiece: {
@@ -399,8 +399,8 @@ const PART_DATA: Record<PartId, PartData> = {
     purpose:
       'The stopbar holds the ball ends of the strings and pulls them rearward, creating the downward break angle across the saddles.',
     mechanism:
-      'A solid aluminium or zinc bar sits on two studs. Lowering it increases the break angle, which adds tension behind the bridge and changes feel and sustain.',
-    material: 'Aluminium',
+      'A solid gold-plated bar sits on two studs. Lowering it increases the break angle, which adds tension behind the bridge and changes feel and sustain.',
+    material: 'Gold-plated aluminium',
     fact: '“Top-wrapping” — running the strings over the top of the stopbar — reduces the break angle and is a long-standing Les Paul setup trick.',
   },
   'volume-knobs': {
@@ -412,7 +412,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The two volume knobs control each pickup’s level independently, so a player can mix them or fade one in with the selector in the middle.',
     mechanism:
       'Each knob turns a potentiometer wired as a variable resistor between the pickup and the output. Turning down bleeds signal to ground; the cable’s capacitance also rolls off treble as the level drops.',
-    material: 'Amber top-hat knobs, audio-taper potentiometers',
+    material: 'Black top-hat knobs, audio-taper potentiometers',
     fact: '“Woman tone” is a wiring and capacitor trick, not a myth: the tone control and volume interaction can produce a nasal, vocal midrange.',
     signalStage: 'volume',
   },
@@ -425,7 +425,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The tone knobs darken the pickup’s sound by shunting high frequencies to ground, leaving the lower frequencies intact.',
     mechanism:
       'A potentiometer and a 0.022 µF capacitor form a low-pass filter across the signal. Turning the knob down lowers the cutoff, so the sound gets rounder rather than simply quieter.',
-    material: 'Amber top-hat knobs, 0.022 µF capacitor',
+    material: 'Black top-hat knobs, 0.022 µF capacitor',
     fact: 'The capacitor value is a voicing choice: 0.022 µF is the classic Gibson value; 0.047 µF would roll off much more.',
     signalStage: 'tone',
   },
@@ -438,7 +438,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The three-way toggle routes one pickup, the other, or both to the volume and tone controls.',
     mechanism:
       'A spring-loaded toggle moves a contact between three lugs. The middle position connects both pickups in parallel, which is why it sounds leaner than either pickup alone.',
-    material: 'Nickel-plated brass',
+    material: 'Gold-plated brass',
     fact: 'The switch is not a blend control: the two pickups keep their own volume and tone settings even in the middle position.',
     signalStage: 'selector',
   },
@@ -450,9 +450,9 @@ const PART_DATA: Record<PartId, PartData> = {
     purpose:
       'The printed ring tells a player which direction selects the neck or bridge pickup without looking at the wiring.',
     mechanism:
-      'A cream plastic ring sits under the switch nut, with “Rhythm” toward the neck pickup and “Treble” toward the bridge. The wording follows the pickup positions, not the physical switch direction on every guitar.',
-    material: 'Cream ABS',
-    fact: 'The nickname comes from its shape and markings; collectors care about the exact font and colour of original rings.',
+      'A black plastic ring with gold lettering sits under the switch nut, with “Rhythm” toward the neck pickup and “Treble” toward the bridge. The wording follows the pickup positions, not the physical switch direction on every guitar.',
+    material: 'Black ABS with gold print',
+    fact: 'The nickname comes from its shape and markings; on the Custom the chip is black, so the gold lettering does the labelling.',
   },
   'output-jack': {
     name: 'Output jack',
@@ -463,7 +463,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The jack is the instrument’s output connector: the point where the guitar’s millivolt signal leaves the body.',
     mechanism:
       'A 1/4-inch mono jack has a tip contact for signal and a sleeve contact for ground. The tip springs against the plug’s tip; the sleeve grounds the cable shield.',
-    material: 'Nickel-plated steel',
+    material: 'Gold-plated steel',
     fact: 'A crackling or intermittent Les Paul is often a loose jack nut, not a bad pickup — the jack takes the cable’s leverage every time you move.',
     signalStage: 'output',
   },
@@ -476,7 +476,7 @@ const PART_DATA: Record<PartId, PartData> = {
       'The two buttons hold the strap at the upper horn and the tail of the body, balancing the guitar’s weight.',
     mechanism:
       'Each button is a flanged metal pin screwed into the body. A strap end fits over the flange, and a strap lock can be added to stop it slipping off.',
-    material: 'Nickel-plated steel',
+    material: 'Gold-plated steel',
     fact: 'A Les Paul balances differently from a Strat: the rear button position pulls the neck up and the body sits lower.',
   },
 };
