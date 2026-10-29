@@ -38,6 +38,7 @@ export class PartInteractor {
   private downActive = false;
   private moved = false;
   private highlighted: readonly PartId[] = [];
+  private highlightKey = '';
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -77,6 +78,9 @@ export class PartInteractor {
   }
 
   setHighlight(partIds: readonly PartId[]): void {
+    const key = partIds.join(',');
+    if (key === this.highlightKey) return;
+    this.highlightKey = key;
     this.highlighted = partIds;
     if (this.outlinePass) {
       const selected: Mesh[] = [];

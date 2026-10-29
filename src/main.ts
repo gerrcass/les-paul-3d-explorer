@@ -425,6 +425,7 @@ function applyQuality(tier: QualityTier): void {
   currentTier = tier;
   const settings: QualitySettings = qualitySettings(tier);
   app.renderer.setPixelRatio(Math.min(window.devicePixelRatio, settings.dpr));
+  app.renderer.setSize(window.innerWidth, window.innerHeight, false);
   app.pipeline.setQuality(settings);
   app.pipeline.setSize(window.innerWidth, window.innerHeight);
   app.studio.setShadowQuality(settings.shadowMapSize);

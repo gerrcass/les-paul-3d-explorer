@@ -4,6 +4,7 @@ export default defineConfig({
   base: './',
   build: {
     target: 'es2022',
+    chunkSizeWarningLimit: 800,
     assetsInlineLimit: 0,
     sourcemap: false,
   },

@@ -47,6 +47,7 @@ export class Interface {
   private readonly tourDots: HTMLElement;
   private pinned: PartInfo | null = null;
   private stageMode = false;
+  private hoverId: PartId | null = null;
   private filter = '';
   private hintTimer = 0;
 
@@ -95,16 +96,20 @@ export class Interface {
 
   setHover(part: PartInfo | null, x = 0, y = 0): void {
     if (!part) {
+      this.hoverId = null;
       this.tooltip.classList.remove('is-visible');
       this.tooltip.hidden = true;
       return;
     }
-    this.tooltip.replaceChildren();
-    const category = el('span', 'tooltip__category', CATEGORY_BY_ID[part.category].label);
-    const name = el('strong', 'tooltip__name', part.name);
-    const copy = el('span', 'tooltip__copy', part.tagline);
-    const foot = el('span', 'tooltip__foot', 'Click to pin');
-    this.tooltip.append(category, name, copy, foot);
+    if (this.hoverId !== part.id) {
+      this.hoverId = part.id;
+      this.tooltip.replaceChildren();
+      const category = el('span', 'tooltip__category', CATEGORY_BY_ID[part.category].label);
+      const name = el('strong', 'tooltip__name', part.name);
+      const copy = el('span', 'tooltip__copy', part.tagline);
+      const foot = el('span', 'tooltip__foot', 'Click to pin');
+      this.tooltip.append(category, name, copy, foot);
+    }
     this.tooltip.hidden = false;
     this.tooltip.classList.add('is-visible');
 
