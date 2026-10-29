@@ -215,6 +215,11 @@ function buildTailpiece(materials: MaterialSet): Group {
     stud.position.set(side * 1.48, y, surface + 0.02);
     tag(stud, 'tailpiece');
     group.add(stud);
+
+    const anchor = new Mesh(new CylinderGeometry(0.2, 0.2, 0.07, 16), materials.nickel);
+    anchor.position.set(side * 1.48, y, surface - 0.01);
+    tag(anchor, 'tailpiece');
+    group.add(anchor);
   }
 
   return group;
@@ -253,7 +258,7 @@ function buildKnob(
   group.add(body);
 
   const topMaterial = new MeshStandardMaterial({
-    map: textures?.knobTop ?? null,
+    map: (partId === 'volume-knobs' ? textures?.knobTopVolume : textures?.knobTopTone) ?? null,
     color: textures ? 0xffffff : 0xd7a33f,
     roughness: 0.28,
     metalness: 0.05,

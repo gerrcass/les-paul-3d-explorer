@@ -107,7 +107,7 @@ export function buildLesPaul(options: BuildOptions = {}): BuiltGuitar {
     {
       name: 'neck',
       objects: collect('neck'),
-      offset: 0,
+      offset: 1.4,
       offsetY: 0,
     },
     {

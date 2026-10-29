@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Box3, Vector3 } from 'three';
 import { buildLesPaul } from '../src/scene/buildGuitar';
 import { PART_IDS, getPart } from '../src/domain/parts';
+import { NUT_Y, SCALE_LENGTH, fretY } from '../src/scene/constants';
 
 describe('complete instrument build', () => {
   const guitar = buildLesPaul();
@@ -28,16 +29,18 @@ describe('complete instrument build', () => {
 
   it('builds a guitar-sized instrument with a Les Paul body width', () => {
     const size = guitar.bounds.getSize(new Vector3());
-    expect(size.x).toBeGreaterThan(12.2);
-    expect(size.x).toBeLessThan(13.4);
+    expect(size.x).toBeGreaterThan(12.4);
+    expect(size.x).toBeLessThan(13.1);
     expect(size.y).toBeGreaterThan(40);
     expect(size.y).toBeLessThan(43.5);
     expect(size.z).toBeGreaterThan(2.5);
   });
 
-  it('has 22 frets and six tuning machines', () => {
+  it('has 22 frets, a 24.75-inch scale, and six tuning machines', () => {
     const frets = guitar.meshesByPart.get('frets') ?? [];
     expect(frets).toHaveLength(22);
+    expect(fretY(12)).toBeCloseTo(NUT_Y - SCALE_LENGTH / 2, 4);
+    expect(fretY(22)).toBeCloseTo(NUT_Y - SCALE_LENGTH * (1 - Math.pow(2, -22 / 12)), 4);
     const tuners = guitar.meshesByPart.get('tuners') ?? [];
     expect(tuners.length).toBeGreaterThanOrEqual(6);
   });
@@ -62,6 +65,7 @@ describe('complete instrument build', () => {
   it('explodes every assembly along the instrument normal and returns home', () => {
     const names = guitar.explodeLayers.map((layer) => layer.name);
     expect(names).toEqual(['body', 'top', 'neck', 'electronics', 'hardware', 'strings']);
+    expect(guitar.explodeLayers.find((layer) => layer.name === 'neck')?.offset).toBeGreaterThan(0);
 
     const depthBefore = new Box3().setFromObject(guitar.root, true).getSize(new Vector3()).z;
     guitar.applyExplosion(1);

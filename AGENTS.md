@@ -15,6 +15,7 @@ Interactive, photoreal 3D anatomy of a 1959 Gibson Les Paul. Static site, Three.
 - **Architecture decisions:** `docs/adr/`. Read before changing the renderer, the part model, or deployment.
 - **Review rules:** `CODING_STANDARDS.md`.
 - **Issue workflow:** `docs/agents/issue-tracker.md`.
+- **Browser checks and screenshot evidence:** `docs/agents/verification.md`.
 
 ## Working agreements
 

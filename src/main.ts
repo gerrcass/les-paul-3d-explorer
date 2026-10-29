@@ -93,6 +93,11 @@ function bootstrap(): void {
   let pipeline: RenderPipeline;
   try {
     renderer.outputColorSpace = SRGBColorSpace;
+    const gl = renderer.getContext();
+    const rendererInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    const gpuName = rendererInfo ? String(gl.getParameter(rendererInfo.UNMASKED_RENDERER_WEBGL)) : '';
+    const qualityOverride = new URLSearchParams(window.location.search).get('quality');
+    if (!qualityOverride && /swiftshader|software|llvmpipe/i.test(gpuName)) currentTier = 'lite';
     renderer.toneMapping = ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.96;
     renderer.setClearColor(0x000000, 0);
@@ -290,6 +295,10 @@ function buildCallbacks(): InterfaceCallbacks {
 function selectPart(partId: PartId): void {
   const app = experience;
   if (!app) return;
+  if (pinned === partId && !tour.active) {
+    clearSelection();
+    return;
+  }
   pinned = partId;
   ui.setPinned(getPart(partId));
   ui.setHover(null);
@@ -321,11 +330,14 @@ function handleHover(partId: PartId | null, x: number, y: number): void {
 function refreshHighlight(): void {
   const app = experience;
   if (!app) return;
-  let ids: readonly PartId[] = [];
-  if (hovered) ids = [hovered];
-  else if (preview) ids = [preview];
-  else if (tour.active) ids = currentStage(tour)?.partIds ?? [];
-  else if (pinned) ids = [pinned];
+  const ids: PartId[] = [];
+  if (tour.active) {
+    for (const partId of currentStage(tour)?.partIds ?? []) ids.push(partId);
+  } else if (pinned) {
+    ids.push(pinned);
+  }
+  if (preview && !ids.includes(preview)) ids.push(preview);
+  if (hovered && !ids.includes(hovered)) ids.push(hovered);
   app.interactor.setHighlight(ids);
 }
 

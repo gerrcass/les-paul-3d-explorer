@@ -5,7 +5,8 @@ export interface GuitarTextures {
   readonly mahogany: Texture;
   readonly rosewood: Texture;
   readonly veneer: Texture;
-  readonly knobTop: Texture;
+  readonly knobTopVolume: Texture;
+  readonly knobTopTone: Texture;
   readonly pokerChip: Texture;
   readonly logo: Texture;
   readonly script: Texture;
@@ -189,7 +190,7 @@ function drawVeneer(context: CanvasRenderingContext2D, width: number, height: nu
   }
 }
 
-function drawKnobTop(context: CanvasRenderingContext2D, width: number, height: number): void {
+function drawKnobTop(context: CanvasRenderingContext2D, width: number, height: number, label: string): void {
   context.clearRect(0, 0, width, height);
   const center = width / 2;
   const radius = width * 0.5;
@@ -240,6 +241,8 @@ function drawKnobTop(context: CanvasRenderingContext2D, width: number, height: n
   context.beginPath();
   context.arc(center, center, radius * 0.08, 0, Math.PI * 2);
   context.fill();
+  context.font = '600 20px Helvetica, Arial, sans-serif';
+  context.fillText(label, center, center + radius * 0.36);
 }
 
 function drawPokerChip(context: CanvasRenderingContext2D, width: number, height: number): void {
@@ -355,7 +358,8 @@ export function createGuitarTextures(anisotropy = 8): GuitarTextures {
     mahogany: createTexture(512, 1024, drawMahogany, anisotropy),
     rosewood: createTexture(512, 1024, drawRosewood, anisotropy),
     veneer: createTexture(512, 512, drawVeneer, anisotropy),
-    knobTop: createTexture(256, 256, drawKnobTop, anisotropy),
+    knobTopVolume: createTexture(256, 256, (context, width, height) => drawKnobTop(context, width, height, 'VOL'), anisotropy),
+    knobTopTone: createTexture(256, 256, (context, width, height) => drawKnobTop(context, width, height, 'TONE'), anisotropy),
     pokerChip: createTexture(512, 512, drawPokerChip, anisotropy),
     logo: createTexture(512, 160, drawLogo, anisotropy),
     script: createTexture(512, 160, drawScript, anisotropy),

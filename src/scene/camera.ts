@@ -22,9 +22,9 @@ const MOBILE_HERO: CameraPose = {
 
 export const VIEW_PRESETS: Readonly<Record<ViewPreset, CameraPose>> = {
   hero: { position: new Vector3(18, 14.5, 72), target: new Vector3(0, 12, 0) },
-  body: { position: new Vector3(5.5, 2.5, 31), target: new Vector3(0, 0.8, 0.5) },
+  body: { position: new Vector3(6.5, 3, 36), target: new Vector3(0, 0.8, 0.5) },
   neck: { position: new Vector3(10, 21, 46), target: new Vector3(0, 19.5, 1.2) },
-  hardware: { position: new Vector3(3.5, 3.8, 22), target: new Vector3(0, 2.6, 1.2) },
+  hardware: { position: new Vector3(4, 4, 30), target: new Vector3(0, 2.6, 1.2) },
   exploded: { position: new Vector3(72, 16, 50), target: new Vector3(0, 12, 0) },
 };
 
@@ -92,8 +92,10 @@ export class CameraDirector {
   framePart(partId: PartId, bounds: Box3): void {
     const sphere = bounds.getBoundingSphere(new Sphere());
     const radius = Math.max(sphere.radius, 0.75);
-    const fov = MathUtils.degToRad(this.camera.fov);
-    const distance = MathUtils.clamp((radius / Math.sin(fov / 2)) * 1.18, 12, 96);
+    const verticalFov = MathUtils.degToRad(this.camera.fov);
+    const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * this.camera.aspect);
+    const limitingFov = Math.min(verticalFov, horizontalFov);
+    const distance = MathUtils.clamp((radius / Math.sin(limitingFov / 2)) * 1.18, 12, 110);
     const direction = focusDirection(partId);
     const target = sphere.center.clone();
     const position = target.clone().addScaledVector(direction, distance);
