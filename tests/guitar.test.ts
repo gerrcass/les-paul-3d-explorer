@@ -28,9 +28,12 @@ describe('complete instrument build', () => {
   });
 
   it('builds a guitar-sized instrument with a Les Paul body width', () => {
+    const body = guitar.meshesByPart.get('body-back')?.[0];
+    expect(body).toBeDefined();
+    const bodySize = new Box3().setFromObject(body!).getSize(new Vector3());
+    expect(bodySize.x).toBeGreaterThan(12.4);
+    expect(bodySize.x).toBeLessThan(13.1);
     const size = guitar.bounds.getSize(new Vector3());
-    expect(size.x).toBeGreaterThan(12.4);
-    expect(size.x).toBeLessThan(13.1);
     expect(size.y).toBeGreaterThan(40);
     expect(size.y).toBeLessThan(43.5);
     expect(size.z).toBeGreaterThan(2.5);
@@ -39,7 +42,7 @@ describe('complete instrument build', () => {
   it('has 22 frets, a 24.75-inch scale, and six tuning machines', () => {
     const frets = guitar.meshesByPart.get('frets') ?? [];
     expect(frets).toHaveLength(22);
-    expect(fretY(12)).toBeCloseTo(NUT_Y - SCALE_LENGTH / 2, 4);
+    expect(fretY(12)).toBeCloseTo(13.375, 4);
     expect(fretY(22)).toBeCloseTo(NUT_Y - SCALE_LENGTH * (1 - Math.pow(2, -22 / 12)), 4);
     const tuners = guitar.meshesByPart.get('tuners') ?? [];
     expect(tuners.length).toBeGreaterThanOrEqual(6);
@@ -52,6 +55,23 @@ describe('complete instrument build', () => {
     expect(box.min.y).toBeLessThan(-0.2);
     expect(box.max.y).toBeGreaterThan(29);
     expect(box.min.z).toBeGreaterThan(0.45);
+  });
+
+  it('keeps every inlay inside the fretboard', () => {
+    const inlays = guitar.meshesByPart.get('inlays') ?? [];
+    expect(inlays.length).toBeGreaterThan(9);
+    for (const inlay of inlays) {
+      const box = new Box3().setFromObject(inlay);
+      expect(box.min.y).toBeGreaterThan(7.3);
+      expect(box.max.y).toBeLessThan(NUT_Y);
+    }
+  });
+
+  it('gives the neck and fretboard texture coordinates', () => {
+    const board = guitar.meshesByPart.get('fretboard')?.[0];
+    const neck = guitar.meshesByPart.get('neck')?.[0];
+    expect(board?.geometry.getAttribute('uv')).toBeDefined();
+    expect(neck?.geometry.getAttribute('uv')).toBeDefined();
   });
 
   it('provides focus bounds for every part', () => {

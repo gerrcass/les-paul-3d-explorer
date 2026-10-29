@@ -27,8 +27,9 @@ export function createPipeline(
   quality: QualitySettings,
 ): RenderPipeline {
   const size = renderer.getSize(new Vector2());
+  let pixelRatio = Math.min(window.devicePixelRatio, quality.dpr);
   const composer = new EffectComposer(renderer);
-  composer.setPixelRatio(Math.min(window.devicePixelRatio, quality.dpr));
+  composer.setPixelRatio(pixelRatio);
   composer.setSize(size.x, size.y);
 
   composer.addPass(new RenderPass(scene, camera));
@@ -48,6 +49,7 @@ export function createPipeline(
   composer.addPass(bloomPass);
 
   const smaaPass = new SMAAPass();
+  smaaPass.enabled = quality.tier !== 'lite';
   composer.addPass(smaaPass);
 
   composer.addPass(new OutputPass());
@@ -57,15 +59,16 @@ export function createPipeline(
   };
 
   const setSize = (width: number, height: number): void => {
+    composer.setPixelRatio(pixelRatio);
     composer.setSize(width, height);
-    outlinePass.setSize(width, height);
-    bloomPass.setSize(width, height);
   };
 
   const setQuality = (settings: QualitySettings): void => {
-    composer.setPixelRatio(Math.min(window.devicePixelRatio, settings.dpr));
+    pixelRatio = Math.min(window.devicePixelRatio, settings.dpr);
+    composer.setPixelRatio(pixelRatio);
     outlinePass.enabled = settings.outline;
     bloomPass.enabled = settings.bloom;
+    smaaPass.enabled = settings.tier !== 'lite';
     renderer.shadowMap.enabled = true;
   };
 

@@ -25,6 +25,7 @@
     <meta name="robots" content="index,follow" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
     <link rel="stylesheet" href="/src/style.css" />
+    <noscript><style>#loading{display:none!important}</style></noscript>
   </head>
   <body>
     <div id="app">
@@ -43,10 +44,10 @@
         </div>
         <div class="toolbar" role="toolbar" aria-label="Instrument controls">
           <div class="views" role="group" aria-label="Camera presets">
-            <button type="button" data-view="hero" class="is-active">Full</button>
-            <button type="button" data-view="body">Body</button>
-            <button type="button" data-view="neck">Neck</button>
-            <button type="button" data-view="hardware">Hardware</button>
+            <button type="button" data-view="hero" class="is-active" aria-pressed="true">Full</button>
+            <button type="button" data-view="body" aria-pressed="false">Body</button>
+            <button type="button" data-view="neck" aria-pressed="false">Neck</button>
+            <button type="button" data-view="hardware" aria-pressed="false">Hardware</button>
           </div>
           <button type="button" id="explode-button" class="tool" aria-pressed="false" title="Separate the major assemblies">
             Explode

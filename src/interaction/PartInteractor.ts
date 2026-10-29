@@ -34,8 +34,8 @@ export class PartInteractor {
   private clientY = 0;
   private downX = 0;
   private downY = 0;
-  private downTime = 0;
   private downActive = false;
+  private pointerDown = false;
   private moved = false;
   private highlighted: readonly PartId[] = [];
   private highlightKey = '';
@@ -62,7 +62,7 @@ export class PartInteractor {
   }
 
   update(): void {
-    if (!this.dirty || !this.pointerInside || this.pointerType === 'touch') return;
+    if (!this.dirty || !this.pointerInside || this.pointerType === 'touch' || this.pointerDown) return;
     this.dirty = false;
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const hits = this.raycaster.intersectObjects([...this.guitar.pickables], false);
@@ -163,10 +163,10 @@ export class PartInteractor {
   private readonly onPointerDown = (event: PointerEvent): void => {
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     this.downActive = true;
+    this.pointerDown = true;
     this.moved = false;
     this.downX = event.clientX;
     this.downY = event.clientY;
-    this.downTime = performance.now();
     this.clientX = event.clientX;
     this.clientY = event.clientY;
   };
@@ -174,9 +174,10 @@ export class PartInteractor {
   private readonly onPointerUp = (event: PointerEvent): void => {
     if (!this.downActive) return;
     this.downActive = false;
-    const elapsed = performance.now() - this.downTime;
+    this.pointerDown = false;
+    this.dirty = true;
     const distance = Math.hypot(event.clientX - this.downX, event.clientY - this.downY);
-    if (this.moved || distance > 6 || elapsed > 700) {
+    if (this.moved || distance > 6) {
       this.canvas.style.cursor = 'grab';
       return;
     }
@@ -197,6 +198,7 @@ export class PartInteractor {
 
   private readonly onPointerCancel = (): void => {
     this.downActive = false;
+    this.pointerDown = false;
     this.clearHover();
   };
 

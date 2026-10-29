@@ -166,7 +166,8 @@ function bootstrap(): void {
     ui.showFallback('The WebGL context was lost. Reload to rebuild the instrument.');
   });
 
-  window.__lesPaul = {
+  const debugEnabled = import.meta.env.DEV || new URLSearchParams(window.location.search).has('debug');
+  if (debugEnabled) window.__lesPaul = {
     select: (id: string) => {
       const part = getPart(id);
       if (part) selectPart(part.id);
@@ -264,6 +265,7 @@ function buildCallbacks(): InterfaceCallbacks {
     onFocusPart: (partId) => {
       const app = experience;
       if (!app) return;
+      clearHover();
       const bounds = app.guitar.getPartBounds(partId);
       if (bounds) app.director.framePart(partId, bounds);
     },
@@ -274,6 +276,7 @@ function buildCallbacks(): InterfaceCallbacks {
     onToggleExplode: () => setExploded(!exploded),
     onPreset: (preset) => {
       if (exploded) setExploded(false, false);
+      clearHover();
       experience?.director.setPreset(preset);
       ui.setPreset(preset);
     },
@@ -286,6 +289,7 @@ function buildCallbacks(): InterfaceCallbacks {
     onFocusStagePart: (partId) => {
       const app = experience;
       if (!app) return;
+      clearHover();
       const bounds = app.guitar.getPartBounds(partId);
       if (bounds) app.director.framePart(partId, bounds);
     },
@@ -301,10 +305,7 @@ function selectPart(partId: PartId): void {
   }
   pinned = partId;
   ui.setPinned(getPart(partId));
-  ui.setHover(null);
-  hovered = null;
-  preview = null;
-  refreshHighlight();
+  clearHover();
   const bounds = app.guitar.getPartBounds(partId);
   if (bounds) app.director.framePart(partId, bounds);
   ui.hideHint();
@@ -318,6 +319,14 @@ function clearSelection(): void {
     hovered = null;
     ui.setHover(null);
   }
+  refreshHighlight();
+}
+
+function clearHover(): void {
+  hovered = null;
+  preview = null;
+  ui.setHover(null);
+  experience?.interactor.clearHover();
   refreshHighlight();
 }
 
@@ -342,6 +351,15 @@ function refreshHighlight(): void {
 }
 
 function startTourAt(index: number): void {
+  if (exploded) {
+    exploded = false;
+    explodeTarget = 0;
+    explodeAmount = 0;
+    applyExplosionPending = false;
+    ui.setExploded(false);
+    experience?.guitar.applyExplosion(0);
+  }
+  clearHover();
   tour = startTour(index);
   applyTour();
 }
@@ -362,6 +380,7 @@ function applyTour(): void {
 
   pinned = null;
   ui.setPinned(null);
+  clearHover();
   ui.setStage(stage, tour.index);
   setDimmed(new Set(stage.partIds));
   refreshHighlight();
@@ -420,6 +439,8 @@ function setDimmed(active: ReadonlySet<PartId> | null): void {
 
 function setExploded(on: boolean, moveCamera = true): void {
   const app = experience;
+  if (on && tour.active) exitTour(false);
+  clearHover();
   exploded = on;
   explodeTarget = on ? 1 : 0;
   applyExplosionPending = true;

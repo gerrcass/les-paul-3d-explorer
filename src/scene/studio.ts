@@ -70,6 +70,10 @@ export function createStudio(
   frontFill.position.set(-14, 6, 22);
   group.add(frontFill);
 
+  const rearFill = new DirectionalLight(0xffc49a, 0.55);
+  rearFill.position.set(-8, 5, -24);
+  group.add(rearFill);
+
   const floor = new Mesh(
     new PlaneGeometry(80, 80),
     new MeshStandardMaterial({
@@ -118,8 +122,10 @@ export function createStudio(
   scene.add(group);
 
   const pmrem = new PMREMGenerator(renderer);
-  const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const room = new RoomEnvironment();
+  const env = pmrem.fromScene(room, 0.04).texture;
   pmrem.dispose();
+  room.dispose();
   scene.environment = env;
   scene.environmentIntensity = 0.42;
 

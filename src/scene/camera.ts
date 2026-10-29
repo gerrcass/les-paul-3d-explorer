@@ -98,6 +98,9 @@ export class CameraDirector {
     const distance = MathUtils.clamp((radius / Math.sin(limitingFov / 2)) * 1.18, 12, 110);
     const direction = focusDirection(partId);
     const target = sphere.center.clone();
+    if (typeof window !== 'undefined' && window.innerWidth <= 760) {
+      target.y -= distance * Math.tan(verticalFov / 2) * 0.4;
+    }
     const position = target.clone().addScaledVector(direction, distance);
     this.flyTo({ position, target }, 0.95);
   }

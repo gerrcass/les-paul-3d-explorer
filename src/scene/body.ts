@@ -15,7 +15,6 @@ import {
   BODY_THICKNESS,
   BODY_TOP_Z,
   CARVE_HEIGHT,
-  clamp01,
   smoothstep,
 } from './constants';
 import {
@@ -226,7 +225,7 @@ function buildStrapButtons(materials: MaterialSet): Group {
 export function bodySurfaceZ(x: number, y: number): number {
   const distance = distanceToOutline(x, y);
   const recurve =
-    -0.105 *
+    -0.02 *
     Math.exp(-Math.pow((distance - 0.82) / 0.44, 2)) *
     (1 - smoothstep(3.4, 5.4, distance));
   const crown = CARVE_HEIGHT * smoothstep(0.5, 5.2, distance);
@@ -245,10 +244,4 @@ export function distanceToOutline(x: number, y: number): number {
   return Math.sqrt(best);
 }
 
-export function isInsideBody(x: number, y: number, margin = 0): boolean {
-  return distanceToOutline(x, y) > margin;
-}
 
-export function carveProgress(x: number, y: number): number {
-  return clamp01((bodySurfaceZ(x, y) - BODY_TOP_Z - 0.02) / CARVE_HEIGHT);
-}

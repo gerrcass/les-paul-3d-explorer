@@ -5,8 +5,8 @@ export const SCALE_LENGTH = 24.75;
 export const FRET_COUNT = 22;
 
 export const BODY_BACK_Z = -1.12;
-export const BODY_TOP_Z = 0.63;
-export const BODY_THICKNESS = 1.75;
+export const BODY_TOP_Z = 0.45;
+export const BODY_THICKNESS = 1.56;
 export const CARVE_HEIGHT = 0.55;
 
 export const BODY_JOINT_Y = 6.45;

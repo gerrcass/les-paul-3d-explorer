@@ -55,10 +55,10 @@ A **humbucker** uses two coils with opposite winding and polarity. String motion
 
 | Category | Parts |
 | --- | --- |
-| Body & finish | Mahogany body, carved maple top, body binding, pickguard, control-cavity cover |
+| Body & finish | Mahogany body, carved maple top, body binding |
 | Neck & fretboard | Set neck, rosewood fretboard, frets, trapezoid inlays, fretboard binding, bone nut, headstock, headstock veneer, logo, truss-rod cover |
-| Electronics | Neck humbucker, bridge humbucker, pole pieces, volume controls, tone controls, pickup selector, output jack |
-| Hardware | Tuning machines, pickup rings, Tune-o-matic bridge, saddles, bridge posts & thumbwheels, stopbar tailpiece, poker chip, strap buttons |
+| Electronics | Neck humbucker, bridge humbucker, pole pieces, volume controls, tone controls, pickup selector, output jack, control-cavity cover |
+| Hardware | Tuning machines, pickup rings, Tune-o-matic bridge, saddles, bridge posts & thumbwheels, stopbar tailpiece, poker chip, strap buttons, pickguard |
 | Strings | Strings |
 
 The complete definitions, including what each part does and how it works, live in the app and in the [part registry](src/domain/parts.ts).

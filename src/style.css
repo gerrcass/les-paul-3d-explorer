@@ -5,7 +5,7 @@
   --ink: #f2e7d2;
   --ink-soft: #cbbda5;
   --muted: #8e8171;
-  --faint: #5f5549;
+  --faint: #8a7d6d;
   --gold: #d9ae68;
   --gold-bright: #f0cb8b;
   --gold-deep: #8b5e28;
@@ -602,9 +602,11 @@ a {
 }
 
 .inspector.is-open {
+  visibility: visible;
   opacity: 1;
   transform: none;
   pointer-events: auto;
+  transition: opacity 240ms ease, transform 240ms ease, visibility 0s;
 }
 
 .inspector__inner {
@@ -1118,6 +1120,12 @@ a {
   line-height: 1.65;
 }
 
+.fallback__disclaimer {
+  margin-top: 30px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
 .fallback__reason {
   margin-top: 40px;
   color: var(--faint);
@@ -1163,10 +1171,11 @@ a {
     top: 104px;
     left: 22px;
     width: 280px;
+    visibility: hidden;
     opacity: 0;
     transform: translateX(-112%);
     pointer-events: none;
-    transition: opacity 200ms ease, transform 240ms ease;
+    transition: opacity 200ms ease, transform 240ms ease, visibility 0s linear 240ms;
   }
 
   .index.is-open {
@@ -1220,7 +1229,7 @@ a {
   }
 
   .tool {
-    min-height: 32px;
+    min-height: 40px;
     padding: 7px 10px;
     font-size: 8px;
     letter-spacing: 0.1em;
@@ -1233,6 +1242,7 @@ a {
   }
 
   .button--signal {
+    min-height: 40px;
     padding: 8px 11px;
     font-size: 8px;
   }
@@ -1244,6 +1254,7 @@ a {
   .index-toggle {
     top: 76px;
     left: 16px;
+    min-height: 44px;
   }
 
   .index {
@@ -1261,10 +1272,15 @@ a {
     bottom: 12px;
     left: 12px;
     width: auto;
-    max-height: 74dvh;
+    max-height: 50dvh;
     border-radius: 18px;
     background: rgba(12, 9, 7, 0.97);
     transform: translateY(18px);
+  }
+
+  body.tour-active .inspector {
+    bottom: 104px;
+    max-height: 46dvh;
   }
 
   .inspector__actions {

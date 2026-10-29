@@ -90,6 +90,18 @@ function buildPickup(partId: 'neck-pickup' | 'bridge-pickup', yCenter: number, m
     steps: 1,
   });
   ringGeometry.translate(0, yCenter, ringBase);
+
+  // Wedge the top of the ring so it follows the string plane.
+  const ringPositions = ringGeometry.getAttribute('position');
+  const ringHeight = Math.max(0.06, ringTop - ringBase);
+  const tilt = partId === 'bridge-pickup' ? 0.045 : 0.03;
+  for (let i = 0; i < ringPositions.count; i += 1) {
+    const t = Math.max(0, Math.min(1, (ringPositions.getZ(i) - ringBase) / ringHeight));
+    ringPositions.setZ(i, ringPositions.getZ(i) + (ringPositions.getY(i) - yCenter) * tilt * t);
+  }
+  ringPositions.needsUpdate = true;
+  ringGeometry.computeVertexNormals();
+
   const ring = new Mesh(ringGeometry, materials.cream);
   ring.name = `${partId}-ring`;
   ring.castShadow = true;
@@ -149,23 +161,30 @@ function buildBridge(materials: MaterialSet): Group {
   const surface = bodySurfaceZ(0, BRIDGE_Y);
 
   const bar = new Mesh(new RoundedBoxGeometry(3.45, 0.55, 0.26, 3, 0.07), materials.nickel);
-  bar.position.set(0, BRIDGE_Y, surface + 0.24);
+  bar.position.set(0, BRIDGE_Y, BRIDGE_SADDLE_Z - 0.24);
   bar.castShadow = true;
   tag(bar, 'bridge');
   group.add(bar);
 
   for (const side of [-1, 1] as const) {
-    const post = new Mesh(new CylinderGeometry(0.075, 0.075, 0.62, 12), materials.nickel);
-    post.position.set(side * 1.38, BRIDGE_Y, surface + 0.2);
+    const post = cylinderBetween(
+      new Vector3(side * 1.38, BRIDGE_Y, surface - 0.04),
+      new Vector3(side * 1.38, BRIDGE_Y, BRIDGE_SADDLE_Z - 0.05),
+      0.075,
+      materials.nickel,
+      12,
+    );
     tag(post, 'bridge-posts');
     group.add(post);
 
     const thumbwheel = new Mesh(new CylinderGeometry(0.17, 0.17, 0.07, 18), materials.nickel);
-    thumbwheel.position.set(side * 1.38, BRIDGE_Y, surface + 0.26);
+    thumbwheel.rotation.x = Math.PI / 2;
+    thumbwheel.position.set(side * 1.38, BRIDGE_Y, BRIDGE_SADDLE_Z - 0.2);
     tag(thumbwheel, 'bridge-posts');
     group.add(thumbwheel);
 
-    const anchor = new Mesh(new CylinderGeometry(0.14, 0.14, 0.08, 14), materials.nickel);
+    const anchor = new Mesh(new CylinderGeometry(0.16, 0.16, 0.07, 16), materials.nickel);
+    anchor.rotation.x = Math.PI / 2;
     anchor.position.set(side * 1.38, BRIDGE_Y, surface - 0.02);
     tag(anchor, 'bridge-posts');
     group.add(anchor);
@@ -174,13 +193,13 @@ function buildBridge(materials: MaterialSet): Group {
   for (let i = 0; i < 6; i += 1) {
     const x = STRING_XS_BRIDGE[i]!;
     const saddle = new Mesh(new RoundedBoxGeometry(0.38, 0.62, 0.1, 2, 0.03), materials.nickel);
-    saddle.position.set(x, BRIDGE_Y - 0.02, surface + 0.39);
+    saddle.position.set(x, BRIDGE_Y - 0.02, BRIDGE_SADDLE_Z - 0.05);
     tag(saddle, 'saddles');
     group.add(saddle);
 
     const screw = new Mesh(new CylinderGeometry(0.028, 0.028, 0.45, 8), materials.nickel);
     screw.rotation.x = Math.PI / 2;
-    screw.position.set(x, BRIDGE_Y - 0.42, surface + 0.36);
+    screw.position.set(x, BRIDGE_Y - 0.42, BRIDGE_SADDLE_Z - 0.08);
     tag(screw, 'saddles');
     group.add(screw);
   }
@@ -195,7 +214,7 @@ function buildTailpiece(materials: MaterialSet): Group {
   const surface = bodySurfaceZ(0, y);
 
   const bar = new Mesh(new RoundedBoxGeometry(3.4, 0.52, 0.3, 3, 0.08), materials.aluminium);
-  bar.position.set(0, y, surface + 0.14);
+  bar.position.set(0, y, surface + 0.35);
   bar.castShadow = true;
   tag(bar, 'tailpiece');
   group.add(bar);
@@ -204,19 +223,25 @@ function buildTailpiece(materials: MaterialSet): Group {
     const x = STRING_XS_BRIDGE[i]!;
     const hole = new Mesh(new CylinderGeometry(0.065, 0.065, 0.34, 10), materials.blackPlastic);
     hole.rotation.x = Math.PI / 2;
-    hole.position.set(x, y, surface + 0.14);
+    hole.position.set(x, y, surface + 0.35);
     tag(hole, 'tailpiece');
     group.add(hole);
     void x;
   }
 
   for (const side of [-1, 1] as const) {
-    const stud = new Mesh(new CylinderGeometry(0.13, 0.13, 0.46, 14), materials.nickel);
-    stud.position.set(side * 1.48, y, surface + 0.02);
+    const stud = cylinderBetween(
+      new Vector3(side * 1.48, y, surface - 0.03),
+      new Vector3(side * 1.48, y, surface + 0.4),
+      0.13,
+      materials.nickel,
+      14,
+    );
     tag(stud, 'tailpiece');
     group.add(stud);
 
     const anchor = new Mesh(new CylinderGeometry(0.2, 0.2, 0.07, 16), materials.nickel);
+    anchor.rotation.x = Math.PI / 2;
     anchor.position.set(side * 1.48, y, surface - 0.01);
     tag(anchor, 'tailpiece');
     group.add(anchor);
@@ -290,23 +315,23 @@ function buildSwitch(materials: MaterialSet, textures: GuitarTextures | null): G
       depthWrite: false,
     });
     const chip = new Mesh(new CircleGeometry(0.67, 48), chipMaterial);
-    chip.position.set(x, y, surface + 0.026);
+    chip.position.set(x, y, surface + 0.075);
     tag(chip, 'switch-ring');
     group.add(chip);
   } else {
     const chip = new Mesh(new RingGeometry(0.3, 0.63, 48), materials.cream);
-    chip.position.set(x, y, surface + 0.026);
+    chip.position.set(x, y, surface + 0.075);
     tag(chip, 'switch-ring');
     group.add(chip);
   }
 
   const nut = new Mesh(new CylinderGeometry(0.2, 0.2, 0.08, 16), materials.nickel);
   nut.rotation.x = Math.PI / 2;
-  nut.position.set(x, y, surface + 0.06);
+  nut.position.set(x, y, surface + 0.1);
   tag(nut, 'selector-switch');
   group.add(nut);
 
-  const shaftStart = new Vector3(x, y, surface + 0.07);
+  const shaftStart = new Vector3(x, y, surface + 0.11);
   const shaftEnd = new Vector3(x, y + 0.18, surface + 0.46);
   const shaft = cylinderBetween(shaftStart, shaftEnd, 0.055, materials.nickel, 10);
   tag(shaft, 'selector-switch');
@@ -326,19 +351,19 @@ function buildJack(materials: MaterialSet): Group {
   group.name = 'jack-assembly';
   const plate = new Mesh(new RoundedBoxGeometry(0.92, 1.02, 0.06, 2, 0.08), materials.blackPlastic);
   plate.rotation.y = Math.PI / 2;
-  plate.position.set(6.27, -3.3, 0.1);
+  plate.position.set(6.42, -3.3, 0.1);
   tag(plate, 'output-jack');
   group.add(plate);
 
   const jack = new Mesh(new CylinderGeometry(0.19, 0.19, 0.36, 18), materials.nickel);
   jack.rotation.z = Math.PI / 2;
-  jack.position.set(6.38, -3.3, 0.1);
+  jack.position.set(6.52, -3.3, 0.1);
   tag(jack, 'output-jack');
   group.add(jack);
 
   const hole = new Mesh(new CylinderGeometry(0.105, 0.105, 0.02, 16), materials.blackPlastic);
   hole.rotation.z = Math.PI / 2;
-  hole.position.set(6.57, -3.3, 0.1);
+  hole.position.set(6.7, -3.3, 0.1);
   tag(hole, 'output-jack');
   group.add(hole);
 
@@ -353,7 +378,7 @@ export function buildStrings(materials: MaterialSet, tunerPosts: readonly Vector
     const radius = STRING_GAUGES[index] ?? 0.02;
     const bridgeX = STRING_XS_BRIDGE[index]!;
     const nutX = STRING_XS_NUT[index]!;
-    const tailZ = bodySurfaceZ(0, -0.58) + 0.3;
+    const tailZ = bodySurfaceZ(0, -0.58) + 0.5;
     const points = [
       new Vector3(bridgeX, -0.58, tailZ),
       new Vector3(bridgeX, BRIDGE_Y, BRIDGE_SADDLE_Z),

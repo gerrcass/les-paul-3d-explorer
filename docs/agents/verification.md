@@ -13,7 +13,7 @@ The production build uses a relative base, so the same check works when the bund
 
 ## Browser evidence
 
-The debug API is available on `window.__lesPaul`:
+The debug API is available on `window.__lesPaul` in development, or in a production build with `?debug` on the URL:
 
 ```js
 __lesPaul.snap()                 // make camera moves instant for deterministic shots
@@ -27,7 +27,7 @@ __lesPaul.view('hero')           // hero | body | neck | hardware | exploded
 __lesPaul.state()
 ```
 
-Capture at 1440×1000 for desktop and 390×844 for mobile. Convert screenshots to WebP before committing; 1440px PNGs are ~1.6 MB each and the noise gradient compresses well as WebP.
+Capture at 1440×900 for desktop and 390×844 for mobile. Convert screenshots to WebP before committing; 1440px PNGs are ~1.6 MB each and the noise gradient compresses well as WebP.
 
 Two environment gotchas:
 

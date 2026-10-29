@@ -90,8 +90,11 @@ export interface LoftStation {
 
 export function loftGeometry(stations: readonly LoftStation[], radialSegments = 20): BufferGeometry {
   const positions: number[] = [];
+  const uvs: number[] = [];
   const indices: number[] = [];
   const ringSize = radialSegments;
+  const firstY = stations[0]?.y ?? 0;
+  const lastY = stations[stations.length - 1]?.y ?? 1;
 
   for (const station of stations) {
     const roundness = station.roundness ?? 3.2;
@@ -104,6 +107,7 @@ export function loftGeometry(stations: readonly LoftStation[], radialSegments = 
         station.centerZ +
         Math.sign(sin) * Math.pow(Math.abs(sin), 2 / roundness) * (station.depth / 2);
       positions.push(x, station.y, z);
+      uvs.push(i / ringSize, (station.y - firstY) / Math.max(0.001, lastY - firstY));
     }
   }
 
@@ -124,8 +128,10 @@ export function loftGeometry(stations: readonly LoftStation[], radialSegments = 
   if (first && last) {
     const firstCenter = positions.length / 3;
     positions.push(0, first.y, first.centerZ);
+    uvs.push(0.5, 0);
     const lastCenter = positions.length / 3;
     positions.push(0, last.y, last.centerZ);
+    uvs.push(0.5, 1);
     for (let i = 0; i < ringSize; i += 1) {
       const next = (i + 1) % ringSize;
       indices.push(firstCenter, next, i);
@@ -136,6 +142,7 @@ export function loftGeometry(stations: readonly LoftStation[], radialSegments = 
 
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
   return geometry;

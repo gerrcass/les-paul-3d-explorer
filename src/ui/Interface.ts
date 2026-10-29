@@ -72,6 +72,8 @@ export class Interface {
     this.tourTitle = required('tour-title');
     this.tourDots = required('tour-dots');
 
+    this.inspector.tabIndex = -1;
+    this.tourBar.tabIndex = -1;
     this.renderParts();
     this.bindToolbar();
     this.bindIndex();
@@ -138,6 +140,7 @@ export class Interface {
   }
 
   setStage(stage: SignalStage | null, index = 0): void {
+    const wasStage = this.stageMode;
     if (!stage) {
       this.stageMode = false;
       if (this.pinned) {
@@ -149,6 +152,7 @@ export class Interface {
       this.tourBar.hidden = true;
       this.tourCta.hidden = false;
       document.body.classList.remove('tour-active');
+      required<HTMLButtonElement>('tour-start').focus();
       return;
     }
 
@@ -162,6 +166,7 @@ export class Interface {
     this.tourKicker.textContent = stage.kicker;
     this.tourTitle.textContent = stage.title;
     this.updateDots(index);
+    if (!wasStage) this.tourBar.focus();
   }
 
   setExploded(exploded: boolean): void {
@@ -178,11 +183,14 @@ export class Interface {
 
   setPreset(preset: ViewPreset): void {
     for (const button of document.querySelectorAll<HTMLButtonElement>('[data-view]')) {
-      button.classList.toggle('is-active', button.dataset.view === preset);
+      const active = button.dataset.view === preset;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
     }
   }
 
   setIndexOpen(open: boolean): void {
+    if (open) this.closeInspector();
     this.indexPanel.classList.toggle('is-open', open);
     this.indexToggle.setAttribute('aria-expanded', String(open));
     document.body.classList.toggle('index-open', open);
@@ -255,7 +263,15 @@ export class Interface {
     signalColumn.append(stages);
 
     columns.append(partsColumn, signalColumn);
-    card.append(columns, el('p', 'fallback__reason', `Reason: ${reason}`));
+    card.append(
+      columns,
+      el(
+        'p',
+        'fallback__disclaimer',
+        'Independent educational project. Not affiliated with Gibson Brands, Inc.',
+      ),
+      el('p', 'fallback__reason', `Reason: ${reason}`),
+    );
     this.fallback.append(card);
   }
 
@@ -275,7 +291,9 @@ export class Interface {
   private bindIndex(): void {
     this.searchInput.addEventListener('input', () => {
       this.filter = this.searchInput.value.trim().toLowerCase();
-      this.renderParts();
+      this.inspector.tabIndex = -1;
+    this.tourBar.tabIndex = -1;
+    this.renderParts();
     });
     this.partsList.addEventListener('keydown', (event) => {
       if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
@@ -369,9 +387,11 @@ export class Interface {
         button.addEventListener('focus', () => this.callbacks.onPreviewPart(part.id));
         button.addEventListener('blur', () => this.callbacks.onPreviewPart(null));
         button.addEventListener('click', () => {
+          const keyboard = button.matches(':focus-visible');
           this.callbacks.onSelectPart(part.id);
           this.hideHint();
           this.setIndexOpen(false);
+          if (keyboard) this.inspector.focus();
         });
         list.append(button);
       }
@@ -503,9 +523,24 @@ export class Interface {
   }
 
   private closeInspector(): void {
+    const wasOpen = this.inspector.classList.contains('is-open');
     this.inspector.classList.remove('is-open');
     this.inspector.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('inspector-open');
+    if (wasOpen) this.focusAfterClose();
+  }
+
+  private focusAfterClose(): void {
+    if (window.innerWidth <= 1100) {
+      this.indexToggle.focus();
+      return;
+    }
+    const active = this.partsList.querySelector<HTMLButtonElement>('button.is-active');
+    if (active) {
+      active.focus();
+      return;
+    }
+    this.partsList.querySelector<HTMLButtonElement>('button[data-part-id]')?.focus();
   }
 
   private updateDots(active: number): void {

@@ -8,6 +8,7 @@ import {
   Float32BufferAttribute,
   Group,
   Mesh,
+  PlaneGeometry,
   Shape,
   ShapeGeometry,
   SphereGeometry,
@@ -18,6 +19,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import {
   BOARD_THICKNESS,
   BODY_JOINT_Y,
+  FRETBOARD_BODY_WIDTH,
   FRETBOARD_END_Y,
   FRETBOARD_NUT_WIDTH,
   FRET_COUNT,
@@ -27,7 +29,7 @@ import {
   fretY,
   fretboardWidthAt,
 } from './constants';
-import { cylinderBetween, loftGeometry, roundedRectShape, tag } from './geometry';
+import { cylinderBetween, loftGeometry, tag } from './geometry';
 import type { MaterialSet } from './materials';
 import type { GuitarTextures } from './textures';
 
@@ -96,6 +98,7 @@ function buildFretboard(materials: MaterialSet): Group {
 
 function fretboardGeometry(): BufferGeometry {
   const positions: number[] = [];
+  const uvs: number[] = [];
   const indices: number[] = [];
   const segments = 110;
   const across = 14;
@@ -115,10 +118,12 @@ function fretboardGeometry(): BufferGeometry {
     for (let j = 0; j <= across; j += 1) {
       const x = -half + (2 * half * j) / across;
       positions.push(x, y, top + crownOffset(x));
+      uvs.push((x + FRETBOARD_BODY_WIDTH / 2) / FRETBOARD_BODY_WIDTH, (y - FRETBOARD_END_Y) / (NUT_Y - FRETBOARD_END_Y));
     }
     for (let j = 0; j <= across; j += 1) {
       const x = -half + (2 * half * j) / across;
       positions.push(x, y, bottom);
+      uvs.push((x + FRETBOARD_BODY_WIDTH / 2) / FRETBOARD_BODY_WIDTH, (y - FRETBOARD_END_Y) / (NUT_Y - FRETBOARD_END_Y));
     }
   }
 
@@ -185,6 +190,7 @@ function fretboardGeometry(): BufferGeometry {
 
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
   return geometry;
@@ -198,7 +204,7 @@ function buildBinding(materials: MaterialSet): Group {
       const y = FRETBOARD_END_Y + ((NUT_Y - FRETBOARD_END_Y) * i) / 90;
       const half = fretboardWidthAt(y) / 2;
       const x = side * (half - 0.012);
-      points.push(new Vector3(x, y, boardTopAt(y) + 0.005));
+      points.push(new Vector3(x, y, fretTopAt(y, x) + 0.004));
     }
     const curve = new CatmullRomCurve3(points, false, 'catmullrom', 0.1);
     const binding = new Mesh(new TubeGeometry(curve, 120, 0.031, 6, false), materials.agedCream);
@@ -234,15 +240,13 @@ function buildFrets(materials: MaterialSet): Group {
 function buildInlays(materials: MaterialSet): Group {
   const group = new Group();
   for (const fretNumber of INLAY_FRETS) {
-    const y = fretY(fretNumber) - 0.82;
-    const crown = FINGERBOARD_RADIUS - Math.sqrt(FINGERBOARD_RADIUS ** 2 - 0.2 ** 2);
-    const z = boardTopAt(y) + crown + 0.012;
+    const y = (fretY(fretNumber) + fretY(fretNumber + 1)) / 2;
     const scale = fretNumber === 12 ? 0.62 : 1;
     const offsets = fretNumber === 12 ? [-0.48, 0.48] : [0];
     for (const offset of offsets) {
       const shape = trapezoidShape(0.46 * scale, 0.32 * scale, 0.46 * scale);
       const inlay = new Mesh(new ShapeGeometry(shape, 8), materials.pearl);
-      inlay.position.set(offset, y, z);
+      inlay.position.set(offset, y, fretTopAt(y, offset) + 0.012);
       inlay.name = `inlay-${fretNumber}`;
       tag(inlay, 'inlays');
       group.add(inlay);
@@ -251,10 +255,10 @@ function buildInlays(materials: MaterialSet): Group {
 
   // Side dots on the bass edge.
   for (const fretNumber of INLAY_FRETS) {
-    const y = fretY(fretNumber) - 0.82;
+    const y = (fretY(fretNumber) + fretY(fretNumber + 1)) / 2;
     const half = fretboardWidthAt(y) / 2;
     const dot = new Mesh(new SphereGeometry(0.042, 10, 8), materials.pearl);
-    dot.position.set(-half + 0.008, y, boardTopAt(y) + 0.06);
+    dot.position.set(-half + 0.008, y, fretTopAt(y, half) + 0.06);
     dot.scale.x = 0.4;
     tag(dot, 'inlays');
     group.add(dot);
@@ -328,7 +332,7 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
       toneMapped: false,
       color: 0xf0e5cc,
     });
-    const logo = new Mesh(new ShapeGeometry(roundedRectShape(3.15, 0.94, 0.04), 8), logoMaterial);
+    const logo = new Mesh(new PlaneGeometry(2.35, 0.73), logoMaterial);
     logo.position.set(0, 4.78, 0.281);
     tag(logo, 'logo');
     group.add(logo);
@@ -340,17 +344,17 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
       toneMapped: false,
       color: 0xeee2ca,
     });
-    const script = new Mesh(new ShapeGeometry(roundedRectShape(2.35, 0.68, 0.04), 8), scriptMaterial);
+    const script = new Mesh(new PlaneGeometry(1.8, 0.56), scriptMaterial);
     script.position.set(0, 2.55, 0.282);
     tag(script, 'logo');
     group.add(script);
   } else {
-    const logo = new Mesh(new ShapeGeometry(roundedRectShape(2.9, 0.86, 0.04), 8), materials.pearl);
+    const logo = new Mesh(new PlaneGeometry(2.35, 0.73), materials.pearl);
     logo.position.set(0, 4.78, 0.281);
     tag(logo, 'logo');
     group.add(logo);
 
-    const script = new Mesh(new ShapeGeometry(roundedRectShape(2.15, 0.62, 0.04), 8), materials.agedCream);
+    const script = new Mesh(new PlaneGeometry(1.8, 0.56), materials.agedCream);
     script.position.set(0, 2.55, 0.282);
     tag(script, 'logo');
     group.add(script);
@@ -372,11 +376,11 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
 
   const trussBorder = new Mesh(
     new TubeGeometry(new CatmullRomCurve3([
-      new Vector3(-0.44, 0.38, 0.326),
-      new Vector3(-0.4, 1.0, 0.326),
+      new Vector3(-0.35, 0.38, 0.326),
+      new Vector3(-0.32, 1.0, 0.326),
       new Vector3(0, 1.52, 0.326),
-      new Vector3(0.4, 1.0, 0.326),
-      new Vector3(0.44, 0.38, 0.326),
+      new Vector3(0.32, 1.0, 0.326),
+      new Vector3(0.35, 0.38, 0.326),
       new Vector3(0, 0.38, 0.326),
     ], true, 'catmullrom', 0.1), 48, 0.012, 5, true),
     materials.agedCream,
@@ -394,7 +398,7 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
       toneMapped: false,
       color: 0xf2e7d0,
     });
-    const label = new Mesh(new ShapeGeometry(roundedRectShape(0.62, 0.22, 0.02), 8), labelMaterial);
+    const label = new Mesh(new PlaneGeometry(0.52, 0.2), labelMaterial);
     label.position.set(0, 0.82, 0.345);
     tag(label, 'truss-rod-cover');
     group.add(label);
@@ -402,21 +406,21 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
 
   const postLocals: Vector3[] = [];
   const posts = [
-    { side: -1 as const, y: 5.68, string: 0 },
-    { side: -1 as const, y: 3.78, string: 1 },
-    { side: -1 as const, y: 1.88, string: 2 },
-    { side: 1 as const, y: 1.88, string: 3 },
-    { side: 1 as const, y: 3.78, string: 4 },
-    { side: 1 as const, y: 5.68, string: 5 },
+    { side: -1 as const, y: 5.68, x: -1.3, string: 0 },
+    { side: -1 as const, y: 3.78, x: -1.05, string: 1 },
+    { side: -1 as const, y: 1.88, x: -0.78, string: 2 },
+    { side: 1 as const, y: 1.88, x: 0.78, string: 3 },
+    { side: 1 as const, y: 3.78, x: 1.05, string: 4 },
+    { side: 1 as const, y: 5.68, x: 1.3, string: 5 },
   ];
   for (const post of posts) {
-    const tuner = buildTuner(materials, post.side, post.y);
+    const tuner = buildTuner(materials, post.side, post.y, post.x);
     group.add(tuner);
-    postLocals[post.string] = new Vector3(post.side * 1.95, post.y, 0.33);
+    postLocals[post.string] = new Vector3(post.x, post.y, 0.33);
   }
 
   // Truss-rod cover screws.
-  for (const x of [-0.28, 0.28]) {
+  for (const x of [-0.22, 0.22]) {
     const screw = cylinderBetween(
       new Vector3(x, 0.47, 0.31),
       new Vector3(x, 0.47, 0.335),
@@ -431,9 +435,8 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
   return { group, postLocals };
 }
 
-function buildTuner(materials: MaterialSet, side: -1 | 1, y: number): Group {
+function buildTuner(materials: MaterialSet, side: -1 | 1, y: number, x: number): Group {
   const group = new Group();
-  const x = side * 1.95;
 
   const post = new Mesh(new CylinderGeometry(0.085, 0.095, 0.55, 12), materials.nickel);
   post.rotation.x = Math.PI / 2;
@@ -480,19 +483,19 @@ function buildTuner(materials: MaterialSet, side: -1 | 1, y: number): Group {
 function headstockShape(): Shape {
   const shape = new Shape();
   shape.moveTo(-0.87, 0);
-  shape.lineTo(-0.95, 0.5);
-  shape.bezierCurveTo(-1.2, 1.4, -1.5, 2.6, -1.58, 3.8);
-  shape.bezierCurveTo(-1.66, 4.9, -2.2, 5.2, -2.28, 6.0);
-  shape.lineTo(-2.26, 6.72);
-  shape.quadraticCurveTo(-2.24, 7.02, -1.88, 7.02);
-  shape.lineTo(-0.68, 7.02);
-  shape.quadraticCurveTo(-0.34, 6.98, 0, 6.82);
-  shape.quadraticCurveTo(0.34, 6.98, 0.68, 7.02);
-  shape.lineTo(1.88, 7.02);
-  shape.quadraticCurveTo(2.24, 7.02, 2.26, 6.72);
-  shape.lineTo(2.28, 6.0);
-  shape.bezierCurveTo(2.2, 5.2, 1.66, 4.9, 1.58, 3.8);
-  shape.bezierCurveTo(1.5, 2.6, 1.2, 1.4, 0.95, 0.5);
+  shape.lineTo(-0.9, 0.45);
+  shape.bezierCurveTo(-0.98, 1.4, -1.1, 2.6, -1.15, 3.8);
+  shape.bezierCurveTo(-1.25, 4.9, -1.6, 5.2, -1.64, 6.0);
+  shape.lineTo(-1.63, 6.72);
+  shape.quadraticCurveTo(-1.61, 7.02, -1.35, 7.02);
+  shape.lineTo(-0.49, 7.02);
+  shape.quadraticCurveTo(-0.245, 6.98, 0, 6.82);
+  shape.quadraticCurveTo(0.245, 6.98, 0.49, 7.02);
+  shape.lineTo(1.35, 7.02);
+  shape.quadraticCurveTo(1.61, 7.02, 1.63, 6.72);
+  shape.lineTo(1.64, 6.0);
+  shape.bezierCurveTo(1.6, 5.2, 1.25, 4.9, 1.15, 3.8);
+  shape.bezierCurveTo(1.1, 2.6, 0.98, 1.4, 0.9, 0.45);
   shape.lineTo(0.87, 0);
   shape.closePath();
   return shape;
@@ -500,11 +503,11 @@ function headstockShape(): Shape {
 
 function trussCoverShape(): Shape {
   const shape = new Shape();
-  shape.moveTo(-0.44, 0);
-  shape.lineTo(0.44, 0);
-  shape.lineTo(0.4, 0.62);
-  shape.quadraticCurveTo(0.32, 1.02, 0, 1.14);
-  shape.quadraticCurveTo(-0.32, 1.02, -0.4, 0.62);
+  shape.moveTo(-0.35, 0);
+  shape.lineTo(0.35, 0);
+  shape.lineTo(0.32, 0.62);
+  shape.quadraticCurveTo(0.26, 1.02, 0, 1.14);
+  shape.quadraticCurveTo(-0.26, 1.02, -0.32, 0.62);
   shape.closePath();
   return shape;
 }
