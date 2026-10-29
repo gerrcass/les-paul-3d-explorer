@@ -27,5 +27,8 @@ _October 2026. A review of how this build went, and what should change in the ag
 ## Still worth doing
 
 - A Playwright smoke test for the pointer path (hover → tooltip, click → pin, Escape → clear, tap → bottom sheet). The headless scene seam is strong; the DOM/pointer seam is only covered by manual screenshots.
-- A model-fidelity pass on the headstock profile and a true wedge profile for the pickup rings. Both are cosmetic, but they are the two places where the silhouette still says “stylised” rather than “photographed”.
-- A performance trace on real hardware at 1440p high; the software-renderer sandbox cannot answer the 60 fps question honestly.
+- A model-fidelity pass can always go further: book-matched top grain, an exactly historical headstock profile, and a trace on real hardware at 1440p high. The software-renderer sandbox cannot answer the 60 fps question honestly.
+
+## Review gate
+
+Two rounds of two independent subagents (spec/3D, then accessibility/delivery/code) caught a CSS regression that would have hidden the inspector, plus a top/back clipping artifact and several focus/touch defects. The implementation branch was only merged after those reports were compared and the fixes were re-checked. Keep that gate on the next visual project.
