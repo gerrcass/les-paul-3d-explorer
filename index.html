@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Les Paul Anatomy — How an electric guitar works</title>
+    <meta
+      name="description"
+      content="An interactive, photoreal 3D anatomy of a 1959 Gibson Les Paul. Hover any part to learn what it is and what it does, then follow the signal from string to amplifier."
+    />
+    <meta name="theme-color" content="#0a0807" />
+    <meta property="og:title" content="Les Paul Anatomy" />
+    <meta
+      property="og:description"
+      content="Thirty-one parts. One signal path. An interactive 3D explainer of the electric guitar."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gerrcass.github.io/les-paul-3d-explorer/" />
+    <meta property="og:image" content="https://gerrcass.github.io/les-paul-3d-explorer/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="833" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://gerrcass.github.io/les-paul-3d-explorer/og.png" />
+    <link rel="canonical" href="https://gerrcass.github.io/les-paul-3d-explorer/" />
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <noscript><style>#loading{display:none!important}</style></noscript>
+  </head>
+  <body>
+    <div id="app">
+      <canvas
+        id="stage"
+        role="img"
+        aria-label="Interactive 3D model of a 1959 Gibson Les Paul Standard. Use the parts index or hover the instrument to identify each part."
+      ></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <div class="grain" aria-hidden="true"></div>
+
+      <header class="masthead">
+        <div class="brand">
+          <span class="brand__eyebrow">1959 · Solid body</span>
+          <h1><span class="brand__name">Les Paul</span> <em>Anatomy</em></h1>
+        </div>
+        <div class="toolbar" role="toolbar" aria-label="Instrument controls">
+          <div class="views" role="group" aria-label="Camera presets">
+            <button type="button" data-view="hero" class="is-active" aria-pressed="true">Full</button>
+            <button type="button" data-view="body" aria-pressed="false">Body</button>
+            <button type="button" data-view="neck" aria-pressed="false">Neck</button>
+            <button type="button" data-view="hardware" aria-pressed="false">Hardware</button>
+          </div>
+          <button type="button" id="explode-button" class="tool" aria-pressed="false" title="Separate the major assemblies">
+            Explode
+          </button>
+          <button type="button" id="quality-button" class="tool tool--quality" title="Rendering quality">High</button>
+          <div class="tour-cta" id="tour-cta">
+            <button type="button" id="tour-start" class="button button--signal">
+              Follow the signal <span>8 stages</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside id="index-panel" class="index" aria-label="Parts index">
+        <div class="index__head">
+          <h2>Parts</h2>
+          <span id="part-count" class="index__total">31</span>
+        </div>
+        <label class="search">
+          <span class="sr-only">Find a part</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="8.5" cy="8.5" r="5.5"></circle>
+            <path d="m13 13 4 4"></path>
+          </svg>
+          <input id="part-search" type="search" placeholder="Find a part" autocomplete="off" spellcheck="false" />
+        </label>
+        <div class="index__scroll" id="parts-list"></div>
+        <p class="index__foot">Hover the instrument to identify a piece. Choose one to pin it.</p>
+      </aside>
+      <button
+        type="button"
+        id="index-toggle"
+        class="index-toggle"
+        aria-controls="index-panel"
+        aria-expanded="false"
+      >
+        Parts <span>31</span>
+      </button>
+
+      <div id="tooltip" class="tooltip" role="status" aria-live="polite" hidden></div>
+      <aside id="inspector" class="inspector" aria-label="Part details" aria-live="polite" aria-hidden="true"></aside>
+
+      <div id="hint" class="hint">Drag to orbit · Scroll to zoom · Hover a part</div>
+
+      <nav id="tour-bar" class="tour" aria-label="Signal path tour" hidden>
+        <button type="button" id="tour-prev" class="tour__arrow" aria-label="Previous stage">←</button>
+        <div class="tour__mid">
+          <div class="tour__meta">
+            <span id="tour-step" class="tour__step">1 / 8</span>
+            <span id="tour-kicker" class="tour__kicker">The source</span>
+          </div>
+          <strong id="tour-title" class="tour__title">Strings</strong>
+          <div id="tour-dots" class="tour__dots" aria-label="Stages"></div>
+        </div>
+        <button type="button" id="tour-next" class="tour__arrow" aria-label="Next stage">→</button>
+        <button type="button" id="tour-exit" class="tour__exit" aria-label="Exit the signal path">×</button>
+      </nav>
+
+      <footer class="footer">
+        <span>Independent educational project. Not affiliated with Gibson Brands, Inc.</span>
+        <a href="https://github.com/gerrcass/les-paul-3d-explorer">Source</a>
+      </footer>
+
+      <div id="loading" class="loading">
+        <div class="loading__mark">LP</div>
+        <p class="loading__title">Les Paul Anatomy</p>
+        <div class="loading__bar"><span></span></div>
+        <p class="loading__note">Setting the neck angle</p>
+      </div>
+
+      <div id="fallback" class="fallback" hidden></div>
+    </div>
+    <noscript>
+      <p style="padding: 2rem; color: #f1e2c3">
+        Les Paul Anatomy needs JavaScript to build the 3D instrument.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

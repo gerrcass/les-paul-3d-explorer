@@ -1,0 +1,19 @@
+# Les Paul Anatomy
+
+> An interactive, photoreal 3D anatomy of a 1959 Gibson Les Paul Standard. Thirty-one parts, each named and explained, plus a guided signal path from the strings to the amplifier.
+
+## What it covers
+
+- The body, carved maple top, binding, pickguard, and control cavity.
+- The set neck, fretboard, frets, inlays, nut, headstock, tuners, and truss rod cover.
+- The humbuckers, pole pieces, selector, volume and tone controls, and output jack.
+- The Tune-o-matic bridge, stopbar tailpiece, strings, poker chip, and strap buttons.
+
+## Signal path
+
+Strings → neck pickup → bridge pickup → selector switch → volume → tone → output jack → amplifier.
+
+## Links
+
+- Live site: https://gerrcass.github.io/les-paul-3d-explorer/
+- Source: https://github.com/gerrcass/les-paul-3d-explorer
