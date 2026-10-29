@@ -13,19 +13,17 @@ export interface MaterialSet {
   readonly cream: MeshPhysicalMaterial;
   readonly agedCream: MeshPhysicalMaterial;
   readonly nickel: MeshStandardMaterial;
-  readonly chrome: MeshStandardMaterial;
-  readonly aluminium: MeshStandardMaterial;
   readonly gold: MeshStandardMaterial;
-  readonly rosewood: MeshStandardMaterial;
+  readonly goldSatin: MeshStandardMaterial;
+  readonly ebony: MeshPhysicalMaterial;
   readonly veneer: MeshPhysicalMaterial;
   readonly blackPlastic: MeshStandardMaterial;
   readonly bone: MeshStandardMaterial;
   readonly pearl: MeshPhysicalMaterial;
   readonly string: MeshStandardMaterial;
   readonly fretWire: MeshStandardMaterial;
-  readonly amber: MeshPhysicalMaterial;
+  readonly knobBlack: MeshPhysicalMaterial;
   readonly screw: MeshStandardMaterial;
-  readonly pickupBobbin: MeshPhysicalMaterial;
 }
 
 function standard(
@@ -67,24 +65,22 @@ function applyTexture(material: MeshPhysicalMaterial | MeshStandardMaterial, tex
 }
 
 export function createMaterials(textures?: GuitarTextures): MaterialSet {
-  const mahogany = physical(0x74432c, 0.52, 0.24, { clearcoatRoughness: 0.34, envMapIntensity: 0.55 });
-  applyTexture(mahogany, textures?.mahogany);
-  if (textures) {
-    mahogany.bumpMap = textures.mahogany;
-    mahogany.bumpScale = 0.018;
-  }
+  const mahogany = physical(0x050505, 0.22, 0.85, { clearcoatRoughness: 0.08, envMapIntensity: 1.15 });
 
-  const mapleTop = physical(0xffffff, 0.4, 0.62, {
-    clearcoatRoughness: 0.2,
-    envMapIntensity: 0.62,
+  const mapleTop = physical(0x050505, 0.16, 1, {
+    clearcoatRoughness: 0.04,
+    envMapIntensity: 1.25,
   });
-  applyTexture(mapleTop, textures?.sunburst);
 
-  const rosewood = standard(0x4f3527, 0.74, 0, { envMapIntensity: 0.3 });
-  applyTexture(rosewood, textures?.rosewood);
+  const ebony = physical(0x050403, 0.88, 0.05, {
+    specularIntensity: 0.08,
+    envMapIntensity: 0.05,
+    clearcoatRoughness: 0.4,
+  });
+  applyTexture(ebony, textures?.veneer);
   if (textures) {
-    rosewood.bumpMap = textures.rosewood;
-    rosewood.bumpScale = 0.012;
+    ebony.bumpMap = textures.veneer;
+    ebony.bumpScale = 0.008;
   }
 
   const veneer = physical(0x030202, 0.72, 0.12, {
@@ -93,16 +89,15 @@ export function createMaterials(textures?: GuitarTextures): MaterialSet {
   });
   applyTexture(veneer, textures?.veneer);
 
-  return {
+  const materials: MaterialSet = {
     mahogany,
     mapleTop,
-    cream: physical(0xc6b38c, 0.8, 0.04, { clearcoatRoughness: 0.55, envMapIntensity: 0.18 }),
-    agedCream: physical(0xd2bc92, 0.62, 0.2, { clearcoatRoughness: 0.48, envMapIntensity: 0.3 }),
+    cream: physical(0xe8dcc4, 0.55, 0.3, { clearcoatRoughness: 0.42, envMapIntensity: 0.35 }),
+    agedCream: physical(0xe4d7bd, 0.6, 0.15, { clearcoatRoughness: 0.45, envMapIntensity: 0.25 }),
     nickel: standard(0x8f928f, 0.46, 1, { envMapIntensity: 0.62 }),
-    chrome: standard(0xdadbd8, 0.12, 1, { envMapIntensity: 1.1 }),
-    aluminium: standard(0xbabdbb, 0.36, 1, { envMapIntensity: 0.9 }),
-    gold: standard(0xc7a04a, 0.3, 1, { envMapIntensity: 1.2 }),
-    rosewood,
+    gold: standard(0xd7b264, 0.22, 1, { envMapIntensity: 1.25 }),
+    goldSatin: standard(0xc9a65a, 0.45, 1, { envMapIntensity: 0.8 }),
+    ebony,
     veneer,
     blackPlastic: standard(0x161311, 0.5, 0.05),
     bone: standard(0xe7dbc0, 0.52, 0),
@@ -115,8 +110,17 @@ export function createMaterials(textures?: GuitarTextures): MaterialSet {
     }),
     string: standard(0xaeb2ae, 0.32, 1, { envMapIntensity: 0.85 }),
     fretWire: standard(0xc4c7c3, 0.26, 1, { envMapIntensity: 1.05 }),
-    amber: physical(0xd09a39, 0.3, 0.8, { clearcoatRoughness: 0.12, envMapIntensity: 0.9 }),
-    screw: standard(0x8f918f, 0.34, 1),
-    pickupBobbin: physical(0xdcc9a4, 0.6, 0.18, { clearcoatRoughness: 0.46, envMapIntensity: 0.42 }),
+    knobBlack: physical(0x050505, 0.22, 0.9, { clearcoatRoughness: 0.08, envMapIntensity: 0.9 }),
+    screw: standard(0xc9a65a, 0.3, 1, { envMapIntensity: 1.05 }),
   };
+  materials.mahogany.name = 'gloss-black-body';
+  materials.mapleTop.name = 'gloss-black-top';
+  materials.ebony.name = 'ebony';
+  materials.gold.name = 'gold';
+  materials.goldSatin.name = 'gold-satin';
+  materials.pearl.name = 'pearl';
+  materials.cream.name = 'cream';
+  materials.agedCream.name = 'aged-cream';
+  materials.knobBlack.name = 'knob-black';
+  return materials;
 }

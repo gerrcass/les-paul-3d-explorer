@@ -34,7 +34,7 @@ import type { MaterialSet } from './materials';
 import type { GuitarTextures } from './textures';
 
 const FINGERBOARD_RADIUS = 12;
-const INLAY_FRETS = [3, 5, 7, 9, 12, 15, 17, 19, 21] as const;
+const INLAY_FRETS = [1, 3, 5, 7, 9, 12, 15, 17, 19, 21] as const;
 
 export interface NeckBuild {
   readonly group: Group;
@@ -87,7 +87,7 @@ function buildShaft(materials: MaterialSet): Group {
 function buildFretboard(materials: MaterialSet): Group {
   const group = new Group();
   const geometry = fretboardGeometry();
-  const board = new Mesh(geometry, materials.rosewood);
+  const board = new Mesh(geometry, materials.ebony);
   board.name = 'fretboard';
   board.castShadow = true;
   board.receiveShadow = true;
@@ -241,10 +241,10 @@ function buildInlays(materials: MaterialSet): Group {
   const group = new Group();
   for (const fretNumber of INLAY_FRETS) {
     const y = (fretY(fretNumber) + fretY(fretNumber + 1)) / 2;
-    const scale = fretNumber === 12 ? 0.62 : 1;
-    const offsets = fretNumber === 12 ? [-0.48, 0.48] : [0];
+    const scale = fretNumber === 12 ? 0.8 : 1;
+    const offsets = fretNumber === 12 ? [-0.45, 0.45] : [0];
     for (const offset of offsets) {
-      const shape = trapezoidShape(0.46 * scale, 0.32 * scale, 0.46 * scale);
+      const shape = blockShape(0.5 * scale, 0.5);
       const inlay = new Mesh(new ShapeGeometry(shape, 8), materials.pearl);
       inlay.position.set(offset, y, fretTopAt(y, offset) + 0.012);
       inlay.name = `inlay-${fretNumber}`;
@@ -266,14 +266,32 @@ function buildInlays(materials: MaterialSet): Group {
   return group;
 }
 
-function trapezoidShape(topWidth: number, bottomWidth: number, height: number): Shape {
+function blockShape(width: number, height: number): Shape {
   const shape = new Shape();
-  shape.moveTo(-bottomWidth / 2, -height / 2);
-  shape.lineTo(bottomWidth / 2, -height / 2);
-  shape.lineTo(topWidth / 2, height / 2);
-  shape.lineTo(-topWidth / 2, height / 2);
+  shape.moveTo(-width / 2, -height / 2);
+  shape.lineTo(width / 2, -height / 2);
+  shape.lineTo(width / 2, height / 2);
+  shape.lineTo(-width / 2, height / 2);
   shape.closePath();
   return shape;
+}
+
+function splitDiamond(materials: MaterialSet): Group {
+  const group = new Group();
+  const width = 0.7;
+  const height = 0.95;
+  for (const side of [-1, 1] as const) {
+    const shape = new Shape();
+    shape.moveTo(0, -height / 2);
+    shape.lineTo((side * width) / 2, 0);
+    shape.lineTo(0, height / 2);
+    shape.closePath();
+    const half = new Mesh(new ShapeGeometry(shape, 8), materials.pearl);
+    half.position.x = side * 0.022;
+    tag(half, 'logo');
+    group.add(half);
+  }
+  return group;
 }
 
 function buildNut(materials: MaterialSet): Group {
@@ -330,10 +348,10 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
       transparent: true,
       depthWrite: false,
       toneMapped: false,
-      color: 0xf0e5cc,
+      color: 0xf0d49a,
     });
-    const logo = new Mesh(new PlaneGeometry(2.35, 0.73), logoMaterial);
-    logo.position.set(0, 4.78, 0.281);
+    const logo = new Mesh(new PlaneGeometry(2.0, 0.62), logoMaterial);
+    logo.position.set(0, 6.0, 0.281);
     tag(logo, 'logo');
     group.add(logo);
 
@@ -342,15 +360,15 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
       transparent: true,
       depthWrite: false,
       toneMapped: false,
-      color: 0xeee2ca,
+      color: 0xf0d49a,
     });
     const script = new Mesh(new PlaneGeometry(1.8, 0.56), scriptMaterial);
     script.position.set(0, 2.55, 0.282);
     tag(script, 'logo');
     group.add(script);
   } else {
-    const logo = new Mesh(new PlaneGeometry(2.35, 0.73), materials.pearl);
-    logo.position.set(0, 4.78, 0.281);
+    const logo = new Mesh(new PlaneGeometry(2.0, 0.62), materials.pearl);
+    logo.position.set(0, 6.0, 0.281);
     tag(logo, 'logo');
     group.add(logo);
 
@@ -359,6 +377,20 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
     tag(script, 'logo');
     group.add(script);
   }
+
+  const diamond = splitDiamond(materials);
+  diamond.position.set(0, 4.72, 0.283);
+  group.add(diamond);
+
+  const headstockBindingCurve = new CatmullRomCurve3(
+    shape.getPoints(120).map((point) => new Vector3(point.x, point.y, 0.272)),
+    true,
+    'catmullrom',
+    0.2,
+  );
+  const headstockBinding = new Mesh(new TubeGeometry(headstockBindingCurve, 240, 0.018, 6, true), materials.agedCream);
+  tag(headstockBinding, 'headstock');
+  group.add(headstockBinding);
 
   const trussCover = new Mesh(
     new ExtrudeGeometry(trussCoverShape(), {
@@ -396,7 +428,7 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
       transparent: true,
       depthWrite: false,
       toneMapped: false,
-      color: 0xf2e7d0,
+      color: 0xf0d49a,
     });
     const label = new Mesh(new PlaneGeometry(0.52, 0.2), labelMaterial);
     label.position.set(0, 0.82, 0.345);
@@ -438,30 +470,30 @@ function buildHeadstock(materials: MaterialSet, textures: GuitarTextures | null)
 function buildTuner(materials: MaterialSet, side: -1 | 1, y: number, x: number): Group {
   const group = new Group();
 
-  const post = new Mesh(new CylinderGeometry(0.085, 0.095, 0.55, 12), materials.nickel);
+  const post = new Mesh(new CylinderGeometry(0.085, 0.095, 0.55, 12), materials.gold);
   post.rotation.x = Math.PI / 2;
   post.position.set(x, y, 0.06);
   tag(post, 'tuners');
   group.add(post);
 
-  const bushing = new Mesh(new CylinderGeometry(0.15, 0.15, 0.06, 16), materials.nickel);
+  const bushing = new Mesh(new CylinderGeometry(0.15, 0.15, 0.06, 16), materials.gold);
   bushing.rotation.x = Math.PI / 2;
   bushing.position.set(x, y, 0.282);
   tag(bushing, 'tuners');
   group.add(bushing);
 
-  const plate = new Mesh(new RoundedBoxGeometry(0.62, 0.78, 0.1, 2, 0.06), materials.nickel);
+  const plate = new Mesh(new RoundedBoxGeometry(0.62, 0.78, 0.1, 2, 0.06), materials.gold);
   plate.position.set(x, y - 0.02, -0.3);
   tag(plate, 'tuners');
   group.add(plate);
 
-  const stem = new Mesh(new CylinderGeometry(0.045, 0.045, 0.55, 8), materials.nickel);
+  const stem = new Mesh(new CylinderGeometry(0.045, 0.045, 0.55, 8), materials.gold);
   stem.rotation.z = Math.PI / 2;
   stem.position.set(x + side * 0.32, y - 0.16, -0.2);
   tag(stem, 'tuners');
   group.add(stem);
 
-  const button = new Mesh(new SphereGeometry(0.22, 16, 10), materials.nickel);
+  const button = new Mesh(new SphereGeometry(0.22, 16, 10), materials.gold);
   button.scale.set(1.28, 0.82, 0.46);
   button.position.set(x + side * 0.62, y - 0.16, -0.2);
   tag(button, 'tuners');

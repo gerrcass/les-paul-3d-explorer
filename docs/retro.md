@@ -6,7 +6,7 @@ _October 2026. A review of how this build went, and what should change in the ag
 
 - **The Part Registry was the right seam.** One typed record drove the scene, tooltip, inspector, index, and tour. The headless `buildLesPaul()` test caught missing meshes and unknown part IDs without a browser, and the registry tests caught copy gaps. This is worth repeating on any scene-plus-UI project.
 - **Deciding the architecture before modelling.** ADR-0001 (procedural), ADR-0002 (vanilla Three.js), ADR-0003 (registry), and ADR-0004 (static Pages) removed the big forks before the first mesh existed.
-- **Procedural art paid off.** No asset licensing, no download pipeline, a 48–90 KB WebP screenshot, and a 224 KB gzipped bundle. The sunburst and flame are tunable in code.
+- **Procedural art paid off.** No asset licensing, no download pipeline, a 48–125 KB WebP screenshot, and a 330 KB gzipped high-quality bundle (the area-light enrichment loads as a separate chunk). The gloss-black finish and gold hardware are tunable in code.
 - **The quality tiers and debug API made verification cheap.** `window.__lesPaul.snap()` made camera screenshots deterministic, and `?quality=` plus the software-renderer check made the page honest on weak machines.
 
 ## What cost time
@@ -20,7 +20,7 @@ _October 2026. A review of how this build went, and what should change in the ag
 ## Environment changes applied
 
 - Added `docs/agents/verification.md` and a pointer from `AGENTS.md`: exact commands, debug API, viewports, and the two browser gotchas.
-- Added `npm run check` to CI and kept it as the single local gate (strict typecheck, 22 tests, build).
+- Added `npm run check` to CI and kept it as the single local gate (strict typecheck, 25 tests, build).
 - Added `CODING_STANDARDS.md` (domain/scene/UI boundaries, resource disposal, test seam, review rules).
 - Added robots.txt, sitemap.xml, llms.txt, and OG metadata so the deployed page is legible to crawlers and social cards.
 

@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Interactive photoreal 3D anatomy of a 1959 Gibson Les Paul.",
+  "description": "Interactive photoreal 3D anatomy of a Gibson Les Paul Custom Black Beauty.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

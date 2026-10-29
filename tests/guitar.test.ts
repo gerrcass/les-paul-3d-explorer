@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Box3, Vector3 } from 'three';
 import { buildLesPaul } from '../src/scene/buildGuitar';
-import { PART_IDS, getPart } from '../src/domain/parts';
+import { PART_IDS, getPart, type PartId } from '../src/domain/parts';
 import { NUT_Y, SCALE_LENGTH, fretY } from '../src/scene/constants';
 
 describe('complete instrument build', () => {
@@ -60,11 +60,25 @@ describe('complete instrument build', () => {
   it('keeps every inlay inside the fretboard', () => {
     const inlays = guitar.meshesByPart.get('inlays') ?? [];
     expect(inlays.length).toBeGreaterThan(9);
+    const blocks = inlays.filter((mesh) => String(mesh.name).startsWith('inlay-'));
+    expect(blocks).toHaveLength(11);
+    expect(blocks.some((mesh) => mesh.name === 'inlay-1')).toBe(true);
+    expect(blocks.some((mesh) => mesh.name === 'inlay-21')).toBe(true);
     for (const inlay of inlays) {
       const box = new Box3().setFromObject(inlay);
       expect(box.min.y).toBeGreaterThan(7.3);
       expect(box.max.y).toBeLessThan(NUT_Y);
     }
+  });
+
+  it('uses the Custom material contract for the body, board, and gold parts', () => {
+    const hasMaterial = (partId: string, name: string): boolean =>
+      (guitar.partMaterials.get(partId as PartId) ?? []).some((material) => material.name === name);
+    expect(hasMaterial('maple-top', 'gloss-black-top')).toBe(true);
+    expect(hasMaterial('fretboard', 'ebony')).toBe(true);
+    expect(hasMaterial('inlays', 'pearl')).toBe(true);
+    expect(hasMaterial('tuners', 'gold')).toBe(true);
+    expect(hasMaterial('neck-pickup', 'gold-satin')).toBe(true);
   });
 
   it('gives the neck and fretboard texture coordinates', () => {

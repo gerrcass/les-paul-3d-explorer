@@ -1,13 +1,13 @@
 # Les Paul Anatomy
 
-> An interactive, photoreal 3D anatomy of a 1959 Gibson Les Paul Standard. Thirty-one parts, each named and explained, plus a guided signal path from the strings to the amplifier.
+> An interactive, photoreal 3D anatomy of a Gibson Les Paul Custom “Black Beauty.” Thirty-one parts, each named and explained, plus a guided signal path from the strings to the amplifier.
 
 ## What it covers
 
-- The body, carved maple top, binding, pickguard, and control cavity.
-- The set neck, fretboard, frets, inlays, nut, headstock, tuners, and truss rod cover.
-- The humbuckers, pole pieces, selector, volume and tone controls, and output jack.
-- The Tune-o-matic bridge, stopbar tailpiece, strings, poker chip, and strap buttons.
+- The gloss-black body, carved maple top, cream multi-ply binding, black pickguard, and control cavity.
+- The set neck, ebony fretboard with pearl block inlays, frets, nut, bound headstock with split-diamond inlay, gold tuners, and truss rod cover.
+- The gold-covered humbuckers, pole pieces, selector, black-and-gold volume and tone knobs, and gold output jack.
+- The gold Tune-o-matic bridge, stopbar tailpiece, strings, poker chip, and strap buttons.
 
 ## Signal path
 
